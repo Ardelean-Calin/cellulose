@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search and Cards Layout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Search Box Section -->
+        <div class="flex justify-center mb-8 md:mb-12">
+            <input type="text" 
+                   id="searchBox"
+                   placeholder="Search..." 
+                   class="w-full max-w-xl px-4 py-3 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-8">
+            <!-- Card 1 -->
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
+                <div class="hidden md:block">
+                    <img src="https://picsum.photos/300/400?random=1" alt="Card image" class="w-full aspect-[3/4] object-cover">
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-amber-500 text-white">vintage</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-blue-500 text-white">transport</span>
+                    </div>
+                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Vintage Lisbon Tram</h3>
+                </div>
+                <div class="flex md:hidden">
+                    <img src="https://picsum.photos/300/400?random=1" alt="Card image" class="w-24 object-cover flex-shrink-0">
+                    <div class="p-4 min-w-0">
+                        <h3 class="text-lg font-semibold mb-1 truncate">Vintage Lisbon Tram</h3>
+                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 1 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
+                        <div class="flex overflow-x-hidden relative">
+                            <div class="flex gap-2 whitespace-nowrap">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-amber-500 text-white">vintage</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-blue-500 text-white">transport</span>
+                            </div>
+                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
+                <div class="hidden md:block">
+                    <img src="https://picsum.photos/300/400?random=2" alt="Card image" class="w-full aspect-[3/4] object-cover">
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-green-500 text-white">landmark</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
+                    </div>
+                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Liberty in Manhattan</h3>
+                </div>
+                <div class="flex md:hidden">
+                    <img src="https://picsum.photos/300/400?random=2" alt="Card image" class="w-24 object-cover flex-shrink-0">
+                    <div class="p-4 min-w-0">
+                        <h3 class="text-lg font-semibold mb-1 truncate">Liberty in Manhattan</h3>
+                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 2 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
+                        <div class="flex overflow-x-hidden relative">
+                            <div class="flex gap-2 whitespace-nowrap">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">landmark</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
+                            </div>
+                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
+                <div class="hidden md:block">
+                    <img src="https://picsum.photos/300/400?random=3" alt="Card image" class="w-full aspect-[3/4] object-cover">
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-orange-500 text-white">sunset</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-blue-500 text-white">coastal</span>
+                    </div>
+                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Sunset at Santorini</h3>
+                </div>
+                <div class="flex md:hidden">
+                    <img src="https://picsum.photos/300/400?random=3" alt="Card image" class="w-24 object-cover flex-shrink-0">
+                    <div class="p-4 min-w-0">
+                        <h3 class="text-lg font-semibold mb-1 truncate">Sunset at Santorini</h3>
+                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 3 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
+                        <div class="flex overflow-x-hidden relative">
+                            <div class="flex gap-2 whitespace-nowrap">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-orange-500 text-white">sunset</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-blue-500 text-white">coastal</span>
+                            </div>
+                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
+                <div class="hidden md:block">
+                    <img src="https://picsum.photos/300/400?random=4" alt="Card image" class="w-full aspect-[3/4] object-cover">
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-indigo-500 text-white">night</span>
+                    </div>
+                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Northern Lights Aurora</h3>
+                </div>
+                <div class="flex md:hidden">
+                    <img src="https://picsum.photos/300/400?random=4" alt="Card image" class="w-24 object-cover flex-shrink-0">
+                    <div class="p-4 min-w-0">
+                        <h3 class="text-lg font-semibold mb-1 truncate">Northern Lights Aurora</h3>
+                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 4 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
+                        <div class="flex overflow-x-hidden relative">
+                            <div class="flex gap-2 whitespace-nowrap">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-indigo-500 text-white">night</span>
+                            </div>
+                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
+                <div class="hidden md:block">
+                    <img src="https://picsum.photos/300/400?random=5" alt="Card image" class="w-full aspect-[3/4] object-cover">
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-indigo-500 text-white">night</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-pink-500 text-white">culture</span>
+                    </div>
+                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Tokyo Night Streets</h3>
+                </div>
+                <div class="flex md:hidden">
+                    <img src="https://picsum.photos/300/400?random=5" alt="Card image" class="w-24 object-cover flex-shrink-0">
+                    <div class="p-4 min-w-0">
+                        <h3 class="text-lg font-semibold mb-1 truncate">Tokyo Night Streets</h3>
+                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 5 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
+                        <div class="flex overflow-x-hidden relative">
+                            <div class="flex gap-2 whitespace-nowrap">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-indigo-500 text-white">night</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-pink-500 text-white">culture</span>
+                            </div>
+                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
+                <div class="hidden md:block">
+                    <img src="https://picsum.photos/300/400?random=6" alt="Card image" class="w-full aspect-[3/4] object-cover">
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-blue-500 text-white">water</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-amber-500 text-white">vintage</span>
+                    </div>
+                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Venice Canals</h3>
+                </div>
+                <div class="flex md:hidden">
+                    <img src="https://picsum.photos/300/400?random=6" alt="Card image" class="w-24 object-cover flex-shrink-0">
+                    <div class="p-4 min-w-0">
+                        <h3 class="text-lg font-semibold mb-1 truncate">Venice Canals</h3>
+                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 6 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
+                        <div class="flex overflow-x-hidden relative">
+                            <div class="flex gap-2 whitespace-nowrap">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-blue-500 text-white">water</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-amber-500 text-white">vintage</span>
+                            </div>
+                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
+                <div class="hidden md:block">
+                    <img src="https://picsum.photos/300/400?random=7" alt="Card image" class="w-full aspect-[3/4] object-cover">
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-orange-500 text-white">desert</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
+                    </div>
+                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Sahara Desert Dunes</h3>
+                </div>
+                <div class="flex md:hidden">
+                    <img src="https://picsum.photos/300/400?random=7" alt="Card image" class="w-24 object-cover flex-shrink-0">
+                    <div class="p-4 min-w-0">
+                        <h3 class="text-lg font-semibold mb-1 truncate">Sahara Desert Dunes</h3>
+                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 7 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
+                        <div class="flex overflow-x-hidden relative">
+                            <div class="flex gap-2 whitespace-nowrap">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-orange-500 text-white">desert</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
+                            </div>
+                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 8 -->
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
+                <div class="hidden md:block">
+                    <img src="https://picsum.photos/300/400?random=8" alt="Card image" class="w-full aspect-[3/4] object-cover">
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-red-500 text-white">mountain</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
+                    </div>
+                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Swiss Alpine Lodge</h3>
+                </div>
+                <div class="flex md:hidden">
+                    <img src="https://picsum.photos/300/400?random=8" alt="Card image" class="w-24 object-cover flex-shrink-0">
+                    <div class="p-4 min-w-0">
+                        <h3 class="text-lg font-semibold mb-1 truncate">Swiss Alpine Lodge</h3>
+                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 8 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
+                        <div class="flex overflow-x-hidden relative">
+                            <div class="flex gap-2 whitespace-nowrap">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-red-500 text-white">mountain</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
+                            </div>
+                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 9 -->
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
+                <div class="hidden md:block">
+                    <img src="https://picsum.photos/300/400?random=9" alt="Card image" class="w-full aspect-[3/4] object-cover">
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-teal-500 text-white">tropical</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-blue-500 text-white">water</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
+                    </div>
+                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Great Barrier Reef</h3>
+                </div>
+                <div class="flex md:hidden">
+                    <img src="https://picsum.photos/300/400?random=9" alt="Card image" class="w-24 object-cover flex-shrink-0">
+                    <div class="p-4 min-w-0">
+                        <h3 class="text-lg font-semibold mb-1 truncate">Great Barrier Reef</h3>
+                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 9 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
+                        <div class="flex overflow-x-hidden relative">
+                            <div class="flex gap-2 whitespace-nowrap">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-teal-500 text-white">tropical</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-blue-500 text-white">water</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
+                            </div>
+                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 10 -->
+            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
+                <div class="hidden md:block">
+                    <img src="https://picsum.photos/300/400?random=10" alt="Card image" class="w-full aspect-[3/4] object-cover">
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-red-500 text-white">mountain</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-pink-500 text-white">culture</span>
+                        <span class="text-sm font-medium px-2 py-1 rounded bg-green-500 text-white">landmark</span>
+                    </div>
+                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Machu Picchu Vista</h3>
+                </div>
+                <div class="flex md:hidden">
+                    <img src="https://picsum.photos/300/400?random=10" alt="Card image" class="w-24 object-cover flex-shrink-0">
+                    <div class="p-4 min-w-0">
+                        <h3 class="text-lg font-semibold mb-1 truncate">Machu Picchu Vista</h3>
+                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 10 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
+                        <div class="flex overflow-x-hidden relative">
+                            <div class="flex gap-2 whitespace-nowrap">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-red-500 text-white">mountain</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-pink-500 text-white">culture</span>
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">landmark</span>
+                            </div>
+                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('searchBox').addEventListener('input', function(e) {
+                const searchQuery = e.target.value.toLowerCase();
+                const cards = document.querySelectorAll('.card');
+                
+                cards.forEach(card => {
+                    const desktopTitle = card.querySelector('.md\\:block h3').textContent.toLowerCase();
+                    const mobileTitle = card.querySelector('.md\\:hidden h3').textContent.toLowerCase();
+                    
+                    if (desktopTitle.includes(searchQuery) || mobileTitle.includes(searchQuery)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        </script>
+    </div>
+</body>
+</html> 
