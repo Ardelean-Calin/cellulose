@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search and Cards Layout</title>
+    <title>Cellulose</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -288,24 +288,6 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            document.getElementById('searchBox').addEventListener('input', function(e) {
-                const searchQuery = e.target.value.toLowerCase();
-                const cards = document.querySelectorAll('.card');
-                
-                cards.forEach(card => {
-                    const desktopTitle = card.querySelector('.md\\:block h3').textContent.toLowerCase();
-                    const mobileTitle = card.querySelector('.md\\:hidden h3').textContent.toLowerCase();
-                    
-                    if (desktopTitle.includes(searchQuery) || mobileTitle.includes(searchQuery)) {
-                        card.style.display = '';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        </script>
     </div>
 </body>
 </html> 
