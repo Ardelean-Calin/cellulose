@@ -8,57 +8,81 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="container mx-auto px-4 py-8 max-w-3xl">
-        <!-- Search and Tags Button Section -->
-        <div class="mb-8 flex justify-between items-center gap-4">
-            <div class="relative flex-grow">
-                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input type="text" 
-                       id="searchBox"
-                       placeholder="Search..." 
-                       class="w-full pl-10 pr-4 py-3 rounded-2xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            
-            <!-- Tags Button and Menu Container -->
-            <div class="relative">
-                <button id="tagsButton" 
-                        class="flex items-center gap-2 px-4 py-3 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-200">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"></path>
+        <!-- Search, Sort and Tags Button Section -->
+        <div class="mb-8 space-y-4">
+            <!-- Search and Tags Row -->
+            <div class="flex justify-between items-center gap-4">
+                <div class="relative flex-grow">
+                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                    <span>Tags</span>
-                </button>
-
-                <!-- Tags Menu (Hidden by default) -->
-                <div id="tagsMenu" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl p-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold">Available Tags</h3>
-                        <button id="closeTagsMenu" class="text-gray-500 hover:text-gray-700">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
                     <input type="text" 
-                           id="tagSearchBox" 
-                           placeholder="Search tags..." 
-                           class="w-full px-3 py-2 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <div class="space-y-2 max-h-96 overflow-y-auto">
-                        {{range .AllTags}}
-                        <div class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-lg">
-                            <span class="w-4 h-4 rounded-full bg-{{.Color}}-500"></span>
-                            <span>{{.Name}}</span>
+                           id="searchBox"
+                           placeholder="Search..." 
+                           class="w-full pl-10 pr-4 py-3 rounded-2xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <!-- Tags Button and Menu Container -->
+                <div class="relative">
+                    <button id="tagsButton" 
+                            class="flex items-center px-3 py-3 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Tags Menu (Hidden by default) -->
+                    <div id="tagsMenu" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl p-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">Available Tags</h3>
+                            <button id="closeTagsMenu" class="text-gray-500 hover:text-gray-700">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
                         </div>
-                        {{end}}
-                        <!-- Add New Tag button (hidden by default) -->
-                        <div id="addTagButton" class="hidden items-center gap-2 p-2 hover:bg-gray-50 rounded-lg cursor-pointer text-blue-600">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                            </svg>
-                            <span>Add "<span id="newTagName"></span>"</span>
+                        <input type="text" 
+                               id="tagSearchBox" 
+                               placeholder="Search tags..." 
+                               class="w-full px-3 py-2 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <div class="space-y-2 max-h-96 overflow-y-auto">
+                            {{range .AllTags}}
+                            <div class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-lg">
+                                <span class="w-4 h-4 rounded-full bg-{{.Color}}-500"></span>
+                                <span>{{.Name}}</span>
+                            </div>
+                            {{end}}
+                            <!-- Add New Tag button (hidden by default) -->
+                            <div id="addTagButton" class="hidden items-center gap-2 p-2 hover:bg-gray-50 rounded-lg cursor-pointer text-blue-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                <span>Add "<span id="newTagName"></span>"</span>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Sort Controls -->
+            <div class="flex items-center gap-4">
+                <div class="text-sm text-gray-600">Sort by:</div>
+                <div class="flex gap-2">
+                    <!-- Title Sort Button -->
+                    <button id="sortTitle" class="flex items-center gap-2 px-3 py-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
+                        <span>Title</span>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Date Sort Button -->
+                    <button id="sortDate" class="flex items-center gap-2 px-3 py-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
+                        <span>Date</span>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -156,6 +180,52 @@
         document.getElementById('addTagButton').addEventListener('click', () => {
             // TODO: Implement tag addition functionality
             console.log('Adding tag:', document.getElementById('newTagName').textContent);
+        });
+
+        // Sort functionality
+        const sortTitle = document.getElementById('sortTitle');
+        const sortDate = document.getElementById('sortDate');
+        let titleSortState = null;
+        let dateSortState = 'desc';  // Initialize to 'desc'
+
+        function updateSortIcons(button, state) {
+            const svg = button.querySelector('svg');
+            if (!state) {
+                svg.classList.remove('text-blue-500');
+                svg.classList.add('text-gray-400');
+                button.classList.remove('bg-blue-50');
+            } else {
+                if (state === 'asc') {
+                    svg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>`;
+                } else { // desc
+                    svg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4 4m0 0l4-4m-4 4v-12"></path>`;
+                }
+                svg.classList.remove('text-gray-400');
+                svg.classList.add('text-blue-500');
+                button.classList.add('bg-blue-50');
+            }
+        }
+
+        // Initialize sort icons on page load
+        updateSortIcons(sortTitle, titleSortState);
+        updateSortIcons(sortDate, dateSortState);
+
+        sortTitle.addEventListener('click', () => {
+            titleSortState = titleSortState === 'asc' ? 'desc' : 'asc';
+            dateSortState = null;
+            updateSortIcons(sortTitle, titleSortState);
+            updateSortIcons(sortDate, dateSortState);
+            // TODO: Implement actual sorting
+            console.log('Sort by title:', titleSortState);
+        });
+
+        sortDate.addEventListener('click', () => {
+            dateSortState = dateSortState === 'asc' ? 'desc' : 'asc';
+            titleSortState = null;
+            updateSortIcons(sortDate, dateSortState);
+            updateSortIcons(sortTitle, titleSortState);
+            // TODO: Implement actual sorting
+            console.log('Sort by date:', dateSortState);
         });
     </script>
 </body>
