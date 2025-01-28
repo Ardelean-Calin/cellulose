@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	_ "modernc.org/sqlite"
 )
@@ -45,7 +44,7 @@ func (db *DB) Init() {
 			title TEXT NOT NULL,
 			path TEXT NOT NULL,
 			content TEXT NOT NULL,
-			tags TEXT DEFAULT ''
+			tags INTEGER[] DEFAULT '{}' -- comma separated list of tag ids
 		)
 	`)
 
@@ -59,16 +58,28 @@ func (db *DB) Init() {
 	`)
 }
 
-// AddDocument adds a document to the database
-func (db *DB) AddDocument(document Document) (id int, err error) {
-	err = db.db.QueryRow(`
-		INSERT INTO documents (title, path, content, tags) VALUES (?, ?, ?, ?)
-	`, document.Title, document.Path, document.Content, strings.Join(document.Tags, ",")).Scan(&id)
-	if err != nil {
-		return 0, fmt.Errorf("failed to add document: %w", err)
+// NewDocument adds a document to the database
+func (db *DB) NewDocument(opts DocumentOptions) (Document, error) {
+	// Verify that the tags exist
+	for _, tag := range opts.Tags {
+		var tagID int
+		err := db.db.QueryRow(`
+			SELECT id FROM tags WHERE name = ?
+		`, tag).Scan(&tagID)
+		if err != nil {
+			return Document{}, fmt.Errorf("failed to verify tag: %w", err)
+		}
 	}
 
-	return id, nil
+	var id int
+	err := db.db.QueryRow(`
+		INSERT INTO documents (title, path, content, tags) VALUES (?, ?, ?, ?)
+	`, opts.Title, opts.Path, opts.Content, opts.Tags).Scan(&id)
+	if err != nil {
+		return Document{}, fmt.Errorf("failed to add document: %w", err)
+	}
+
+	return Document{ID: id, Opts: opts}, nil
 }
 
 // RemoveDocument removes a document from the database
@@ -102,28 +113,34 @@ func (db *DB) RemoveDocument(id int) error {
 
 // Document represents a document in the database
 type Document struct {
-	Title   string   // title of the document
-	Path    string   // path to the document
-	Content string   // content of the document extracted from the file
-	Tags    []string // tags associated with the document
+	ID   int // id of the document
+	Opts DocumentOptions
+}
+
+type DocumentOptions struct {
+	Title   string
+	Path    string
+	Content string
+	Tags    []string
 }
 
 // Tag represents a tag in the database
 type Tag struct {
+	ID    int    // id of the tag
 	Name  string // name of the tag
 	Color string // hex color code
 }
 
-// AddTag adds a tag to the database
-func (db *DB) AddTag(tag Tag) (id int, err error) {
-	err = db.db.QueryRow(`
+// NewTag creates a new tag inside the database
+func (db *DB) NewTag(name string, color string) (Tag, error) {
+	var tag Tag
+	err := db.db.QueryRow(`
 		INSERT INTO tags (name, color) VALUES (?, ?)
-	`, tag.Name, tag.Color).Scan(&id)
+	`, name, color).Scan(&tag.ID, &tag.Name, &tag.Color)
 	if err != nil {
-		return 0, fmt.Errorf("failed to add tag: %w", err)
+		return Tag{}, fmt.Errorf("failed to add tag: %w", err)
 	}
-
-	return id, nil
+	return tag, nil
 }
 
 // RemoveTag removes a tag from the database
@@ -136,4 +153,27 @@ func (db *DB) RemoveTag(id int) error {
 	}
 
 	return nil
+}
+
+// GetTags returns all tags in the database
+func (db *DB) GetTags() ([]Tag, error) {
+	rows, err := db.db.Query(`
+		SELECT id, name, color FROM tags
+	`)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get tags: %w", err)
+	}
+	defer rows.Close()
+
+	tags := []Tag{}
+	for rows.Next() {
+		var tag Tag
+		err = rows.Scan(&tag.Name, &tag.Color)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan tag: %w", err)
+		}
+		tags = append(tags, tag)
+	}
+
+	return tags, nil
 }
