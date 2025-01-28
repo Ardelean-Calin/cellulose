@@ -7,284 +7,150 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4 py-8 max-w-3xl">
         <!-- Search Box Section -->
-        <div class="flex justify-center mb-8 md:mb-12">
-            <input type="text" 
-                   id="searchBox"
-                   placeholder="Search..." 
-                   class="w-full max-w-xl px-4 py-3 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <div class="mb-8">
+            <div class="relative">
+                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" 
+                       id="searchBox"
+                       placeholder="Search..." 
+                       class="w-full pl-10 pr-4 py-3 rounded-2xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
         </div>
 
-        <!-- Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-8">
-            <!-- Card 1 -->
-            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
-                <div class="hidden md:block">
-                    <img src="https://picsum.photos/300/400?random=1" alt="Card image" class="w-full aspect-[3/4] object-cover">
-                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-amber-500 text-white">vintage</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-blue-500 text-white">transport</span>
-                    </div>
-                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Vintage Lisbon Tram</h3>
+        <!-- Cards List -->
+        <div class="space-y-3 md:space-y-4">
+            <!-- Card Template (repeated for each card) -->
+            <div class="card bg-white rounded-lg shadow-md p-3 md:p-4 transition-shadow duration-200 hover:shadow-lg cursor-pointer">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-1.5 md:mb-2">
+                    <h3 class="text-base md:text-lg font-semibold truncate">Q4 Financial Report 2023</h3>
+                    <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">31 Dec 2023</span>
                 </div>
-                <div class="flex md:hidden">
-                    <img src="https://picsum.photos/300/400?random=1" alt="Card image" class="w-24 object-cover flex-shrink-0">
-                    <div class="p-4 min-w-0">
-                        <h3 class="text-lg font-semibold mb-1 truncate">Vintage Lisbon Tram</h3>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 1 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
-                        <div class="flex overflow-x-hidden relative">
-                            <div class="flex gap-2 whitespace-nowrap">
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-amber-500 text-white">vintage</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-blue-500 text-white">transport</span>
-                            </div>
-                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
-                        </div>
-                    </div>
+                <p class="text-gray-600 text-sm mb-2 md:mb-3 line-clamp-2">A brief description of card content goes here. This is a longer description that provides more context about the document or item being displayed.</p>
+                <div class="flex flex-wrap gap-1.5 md:gap-2">
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-amber-500 text-white">finance</span>
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-blue-500 text-white">report</span>
                 </div>
             </div>
 
             <!-- Card 2 -->
-            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
-                <div class="hidden md:block">
-                    <img src="https://picsum.photos/300/400?random=2" alt="Card image" class="w-full aspect-[3/4] object-cover">
-                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-green-500 text-white">landmark</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
-                    </div>
-                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Liberty in Manhattan</h3>
+            <div class="card bg-white rounded-lg shadow-md p-3 md:p-4 transition-shadow duration-200 hover:shadow-lg cursor-pointer">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-1.5 md:mb-2">
+                    <h3 class="text-base md:text-lg font-semibold truncate">Project Roadmap 2024</h3>
+                    <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">15 Jan 2024</span>
                 </div>
-                <div class="flex md:hidden">
-                    <img src="https://picsum.photos/300/400?random=2" alt="Card image" class="w-24 object-cover flex-shrink-0">
-                    <div class="p-4 min-w-0">
-                        <h3 class="text-lg font-semibold mb-1 truncate">Liberty in Manhattan</h3>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 2 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
-                        <div class="flex overflow-x-hidden relative">
-                            <div class="flex gap-2 whitespace-nowrap">
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">landmark</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
-                            </div>
-                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
-                        </div>
-                    </div>
+                <p class="text-gray-600 text-sm mb-2 md:mb-3 line-clamp-2">A brief description of card content goes here. This is a longer description that provides more context about the document or item being displayed.</p>
+                <div class="flex flex-wrap gap-1.5 md:gap-2">
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-green-500 text-white">planning</span>
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-purple-500 text-white">strategy</span>
                 </div>
             </div>
 
             <!-- Card 3 -->
-            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
-                <div class="hidden md:block">
-                    <img src="https://picsum.photos/300/400?random=3" alt="Card image" class="w-full aspect-[3/4] object-cover">
-                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-orange-500 text-white">sunset</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-blue-500 text-white">coastal</span>
-                    </div>
-                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Sunset at Santorini</h3>
+            <div class="card bg-white rounded-lg shadow-md p-3 md:p-4 transition-shadow duration-200 hover:shadow-lg cursor-pointer">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-1.5 md:mb-2">
+                    <h3 class="text-base md:text-lg font-semibold truncate">Meeting Minutes - Product Team</h3>
+                    <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">10 Feb 2024</span>
                 </div>
-                <div class="flex md:hidden">
-                    <img src="https://picsum.photos/300/400?random=3" alt="Card image" class="w-24 object-cover flex-shrink-0">
-                    <div class="p-4 min-w-0">
-                        <h3 class="text-lg font-semibold mb-1 truncate">Sunset at Santorini</h3>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 3 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
-                        <div class="flex overflow-x-hidden relative">
-                            <div class="flex gap-2 whitespace-nowrap">
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-orange-500 text-white">sunset</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-blue-500 text-white">coastal</span>
-                            </div>
-                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
-                        </div>
-                    </div>
+                <p class="text-gray-600 text-sm mb-2 md:mb-3 line-clamp-2">A brief description of card content goes here. This is a longer description that provides more context about the document or item being displayed.</p>
+                <div class="flex flex-wrap gap-1.5 md:gap-2">
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-orange-500 text-white">meeting</span>
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-purple-500 text-white">product</span>
                 </div>
             </div>
 
             <!-- Card 4 -->
-            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
-                <div class="hidden md:block">
-                    <img src="https://picsum.photos/300/400?random=4" alt="Card image" class="w-full aspect-[3/4] object-cover">
-                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-indigo-500 text-white">night</span>
-                    </div>
-                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Northern Lights Aurora</h3>
+            <div class="card bg-white rounded-lg shadow-md p-3 md:p-4 transition-shadow duration-200 hover:shadow-lg cursor-pointer">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-1.5 md:mb-2">
+                    <h3 class="text-base md:text-lg font-semibold truncate">Employee Handbook v2.3</h3>
+                    <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">01 Mar 2024</span>
                 </div>
-                <div class="flex md:hidden">
-                    <img src="https://picsum.photos/300/400?random=4" alt="Card image" class="w-24 object-cover flex-shrink-0">
-                    <div class="p-4 min-w-0">
-                        <h3 class="text-lg font-semibold mb-1 truncate">Northern Lights Aurora</h3>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 4 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
-                        <div class="flex overflow-x-hidden relative">
-                            <div class="flex gap-2 whitespace-nowrap">
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-indigo-500 text-white">night</span>
-                            </div>
-                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
-                        </div>
-                    </div>
+                <p class="text-gray-600 text-sm mb-2 md:mb-3 line-clamp-2">A brief description of card content goes here. This is a longer description that provides more context about the document or item being displayed.</p>
+                <div class="flex flex-wrap gap-1.5 md:gap-2">
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-green-500 text-white">HR</span>
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-indigo-500 text-white">policy</span>
                 </div>
             </div>
 
             <!-- Card 5 -->
-            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
-                <div class="hidden md:block">
-                    <img src="https://picsum.photos/300/400?random=5" alt="Card image" class="w-full aspect-[3/4] object-cover">
-                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-indigo-500 text-white">night</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-pink-500 text-white">culture</span>
-                    </div>
-                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Tokyo Night Streets</h3>
+            <div class="card bg-white rounded-lg shadow-md p-3 md:p-4 transition-shadow duration-200 hover:shadow-lg cursor-pointer">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-1.5 md:mb-2">
+                    <h3 class="text-base md:text-lg font-semibold truncate">Marketing Campaign Brief</h3>
+                    <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">15 Apr 2024</span>
                 </div>
-                <div class="flex md:hidden">
-                    <img src="https://picsum.photos/300/400?random=5" alt="Card image" class="w-24 object-cover flex-shrink-0">
-                    <div class="p-4 min-w-0">
-                        <h3 class="text-lg font-semibold mb-1 truncate">Tokyo Night Streets</h3>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 5 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
-                        <div class="flex overflow-x-hidden relative">
-                            <div class="flex gap-2 whitespace-nowrap">
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-indigo-500 text-white">night</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-pink-500 text-white">culture</span>
-                            </div>
-                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
-                        </div>
-                    </div>
+                <p class="text-gray-600 text-sm mb-2 md:mb-3 line-clamp-2">A brief description of card content goes here. This is a longer description that provides more context about the document or item being displayed.</p>
+                <div class="flex flex-wrap gap-1.5 md:gap-2">
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-indigo-500 text-white">marketing</span>
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-purple-500 text-white">campaign</span>
                 </div>
             </div>
 
             <!-- Card 6 -->
-            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
-                <div class="hidden md:block">
-                    <img src="https://picsum.photos/300/400?random=6" alt="Card image" class="w-full aspect-[3/4] object-cover">
-                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-blue-500 text-white">water</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-amber-500 text-white">vintage</span>
-                    </div>
-                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Venice Canals</h3>
+            <div class="card bg-white rounded-lg shadow-md p-3 md:p-4 transition-shadow duration-200 hover:shadow-lg cursor-pointer">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-1.5 md:mb-2">
+                    <h3 class="text-base md:text-lg font-semibold truncate">Technical Documentation - API v3</h3>
+                    <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">01 May 2024</span>
                 </div>
-                <div class="flex md:hidden">
-                    <img src="https://picsum.photos/300/400?random=6" alt="Card image" class="w-24 object-cover flex-shrink-0">
-                    <div class="p-4 min-w-0">
-                        <h3 class="text-lg font-semibold mb-1 truncate">Venice Canals</h3>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 6 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
-                        <div class="flex overflow-x-hidden relative">
-                            <div class="flex gap-2 whitespace-nowrap">
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-blue-500 text-white">water</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-purple-500 text-white">city</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-amber-500 text-white">vintage</span>
-                            </div>
-                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
-                        </div>
-                    </div>
+                <p class="text-gray-600 text-sm mb-2 md:mb-3 line-clamp-2">A brief description of card content goes here. This is a longer description that provides more context about the document or item being displayed.</p>
+                <div class="flex flex-wrap gap-1.5 md:gap-2">
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-blue-500 text-white">technical</span>
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-purple-500 text-white">API</span>
                 </div>
             </div>
 
             <!-- Card 7 -->
-            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
-                <div class="hidden md:block">
-                    <img src="https://picsum.photos/300/400?random=7" alt="Card image" class="w-full aspect-[3/4] object-cover">
-                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-orange-500 text-white">desert</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
-                    </div>
-                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Sahara Desert Dunes</h3>
+            <div class="card bg-white rounded-lg shadow-md p-3 md:p-4 transition-shadow duration-200 hover:shadow-lg cursor-pointer">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-1.5 md:mb-2">
+                    <h3 class="text-base md:text-lg font-semibold truncate">Customer Feedback Analysis</h3>
+                    <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">15 Jun 2024</span>
                 </div>
-                <div class="flex md:hidden">
-                    <img src="https://picsum.photos/300/400?random=7" alt="Card image" class="w-24 object-cover flex-shrink-0">
-                    <div class="p-4 min-w-0">
-                        <h3 class="text-lg font-semibold mb-1 truncate">Sahara Desert Dunes</h3>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 7 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
-                        <div class="flex overflow-x-hidden relative">
-                            <div class="flex gap-2 whitespace-nowrap">
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-orange-500 text-white">desert</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
-                            </div>
-                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
-                        </div>
-                    </div>
+                <p class="text-gray-600 text-sm mb-2 md:mb-3 line-clamp-2">A brief description of card content goes here. This is a longer description that provides more context about the document or item being displayed.</p>
+                <div class="flex flex-wrap gap-1.5 md:gap-2">
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-orange-500 text-white">feedback</span>
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-green-500 text-white">analysis</span>
                 </div>
             </div>
 
             <!-- Card 8 -->
-            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
-                <div class="hidden md:block">
-                    <img src="https://picsum.photos/300/400?random=8" alt="Card image" class="w-full aspect-[3/4] object-cover">
-                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-red-500 text-white">mountain</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
-                    </div>
-                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Swiss Alpine Lodge</h3>
+            <div class="card bg-white rounded-lg shadow-md p-3 md:p-4 transition-shadow duration-200 hover:shadow-lg cursor-pointer">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-1.5 md:mb-2">
+                    <h3 class="text-base md:text-lg font-semibold truncate">Security Protocol Guidelines</h3>
+                    <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">01 Jul 2024</span>
                 </div>
-                <div class="flex md:hidden">
-                    <img src="https://picsum.photos/300/400?random=8" alt="Card image" class="w-24 object-cover flex-shrink-0">
-                    <div class="p-4 min-w-0">
-                        <h3 class="text-lg font-semibold mb-1 truncate">Swiss Alpine Lodge</h3>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 8 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
-                        <div class="flex overflow-x-hidden relative">
-                            <div class="flex gap-2 whitespace-nowrap">
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-red-500 text-white">mountain</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
-                            </div>
-                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
-                        </div>
-                    </div>
+                <p class="text-gray-600 text-sm mb-2 md:mb-3 line-clamp-2">A brief description of card content goes here. This is a longer description that provides more context about the document or item being displayed.</p>
+                <div class="flex flex-wrap gap-1.5 md:gap-2">
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-red-500 text-white">security</span>
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-green-500 text-white">protocol</span>
                 </div>
             </div>
 
             <!-- Card 9 -->
-            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
-                <div class="hidden md:block">
-                    <img src="https://picsum.photos/300/400?random=9" alt="Card image" class="w-full aspect-[3/4] object-cover">
-                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-teal-500 text-white">tropical</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-blue-500 text-white">water</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
-                    </div>
-                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Great Barrier Reef</h3>
+            <div class="card bg-white rounded-lg shadow-md p-3 md:p-4 transition-shadow duration-200 hover:shadow-lg cursor-pointer">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-1.5 md:mb-2">
+                    <h3 class="text-base md:text-lg font-semibold truncate">Budget Forecast 2024</h3>
+                    <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">15 Aug 2024</span>
                 </div>
-                <div class="flex md:hidden">
-                    <img src="https://picsum.photos/300/400?random=9" alt="Card image" class="w-24 object-cover flex-shrink-0">
-                    <div class="p-4 min-w-0">
-                        <h3 class="text-lg font-semibold mb-1 truncate">Great Barrier Reef</h3>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 9 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
-                        <div class="flex overflow-x-hidden relative">
-                            <div class="flex gap-2 whitespace-nowrap">
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-teal-500 text-white">tropical</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-blue-500 text-white">water</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">nature</span>
-                            </div>
-                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
-                        </div>
-                    </div>
+                <p class="text-gray-600 text-sm mb-2 md:mb-3 line-clamp-2">A brief description of card content goes here. This is a longer description that provides more context about the document or item being displayed.</p>
+                <div class="flex flex-wrap gap-1.5 md:gap-2">
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-teal-500 text-white">finance</span>
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-blue-500 text-white">forecast</span>
                 </div>
             </div>
 
             <!-- Card 10 -->
-            <div class="card bg-white rounded-lg shadow-md overflow-hidden relative transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg md:hover:cursor-pointer">
-                <div class="hidden md:block">
-                    <img src="https://picsum.photos/300/400?random=10" alt="Card image" class="w-full aspect-[3/4] object-cover">
-                    <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-red-500 text-white">mountain</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-pink-500 text-white">culture</span>
-                        <span class="text-sm font-medium px-2 py-1 rounded bg-green-500 text-white">landmark</span>
-                    </div>
-                    <h3 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xl font-semibold text-white bg-black bg-opacity-50 px-3 py-1 rounded truncate max-w-[90%] text-center">Machu Picchu Vista</h3>
+            <div class="card bg-white rounded-lg shadow-md p-3 md:p-4 transition-shadow duration-200 hover:shadow-lg cursor-pointer">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-1.5 md:mb-2">
+                    <h3 class="text-base md:text-lg font-semibold truncate">Product Launch Plan</h3>
+                    <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">01 Sep 2024</span>
                 </div>
-                <div class="flex md:hidden">
-                    <img src="https://picsum.photos/300/400?random=10" alt="Card image" class="w-24 object-cover flex-shrink-0">
-                    <div class="p-4 min-w-0">
-                        <h3 class="text-lg font-semibold mb-1 truncate">Machu Picchu Vista</h3>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-2">A brief description of card 10 content goes here. This is a longer description that will be truncated after two lines with an ellipsis to indicate there's more content available.</p>
-                        <div class="flex overflow-x-hidden relative">
-                            <div class="flex gap-2 whitespace-nowrap">
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-red-500 text-white">mountain</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-pink-500 text-white">culture</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded bg-green-500 text-white">landmark</span>
-                            </div>
-                            <div class="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent"></div>
-                        </div>
-                    </div>
+                <p class="text-gray-600 text-sm mb-2 md:mb-3 line-clamp-2">A brief description of card content goes here. This is a longer description that provides more context about the document or item being displayed.</p>
+                <div class="flex flex-wrap gap-1.5 md:gap-2">
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-red-500 text-white">product</span>
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-pink-500 text-white">launch</span>
+                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-green-500 text-white">planning</span>
                 </div>
             </div>
         </div>
