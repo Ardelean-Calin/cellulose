@@ -5,19 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cellulose</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class'
         }
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('darkMode', {
+                isDark: localStorage.getItem('darkMode') === 'true' || 
+                        (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches),
+                toggle() {
+                    this.isDark = !this.isDark;
+                    localStorage.setItem('darkMode', this.isDark);
+                    document.documentElement.classList.toggle('dark', this.isDark);
+                },
+                init() {
+                    document.documentElement.classList.toggle('dark', this.isDark);
+                    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                        if (!localStorage.getItem('darkMode')) {
+                            this.isDark = e.matches;
+                            document.documentElement.classList.toggle('dark', e.matches);
+                        }
+                    });
+                }
+            });
+
+            Alpine.data('tagsMenu', () => ({
+                isOpen: false,
+                searchTerm: '',
+                tags: [],
+                filteredTags: [],
+                init() {
+                    // Get all tags from the DOM
+                    this.tags = Array.from(this.$el.querySelectorAll('.tag-item')).map(el => ({
+                        name: el.querySelector('.tag-name').textContent,
+                        color: el.querySelector('.tag-color').classList[3].split('-')[1]
+                    }));
+                    this.filteredTags = this.tags;
+                },
+                searchTags() {
+                    const term = this.searchTerm.toLowerCase().trim();
+                    this.filteredTags = this.tags.filter(tag => 
+                        tag.name.toLowerCase().includes(term)
+                    );
+                },
+                hasExactMatch() {
+                    return this.searchTerm && this.filteredTags.some(tag => 
+                        tag.name.toLowerCase() === this.searchTerm.toLowerCase()
+                    );
+                },
+                close() {
+                    this.isOpen = false;
+                    this.searchTerm = '';
+                    this.filteredTags = this.tags;
+                }
+            }));
+
+            Alpine.data('sorting', () => ({
+                titleSort: null,
+                dateSort: 'desc',
+                sortByTitle() {
+                    this.titleSort = this.titleSort === 'asc' ? 'desc' : 'asc';
+                    this.dateSort = null;
+                    // TODO: Implement actual sorting
+                    console.log('Sort by title:', this.titleSort);
+                },
+                sortByDate() {
+                    this.dateSort = this.dateSort === 'asc' ? 'desc' : 'asc';
+                    this.titleSort = null;
+                    // TODO: Implement actual sorting
+                    console.log('Sort by date:', this.dateSort);
+                }
+            }));
+        });
     </script>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 min-h-screen transition-colors duration-200">
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen transition-colors duration-200" 
+      x-data 
+      x-init="$store.darkMode.init()">
     <!-- Dark Mode Toggle -->
-    <button id="darkModeToggle" class="fixed top-4 right-4 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200">
-        <svg id="darkModeIcon" class="w-6 h-6 hidden dark:block text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <button @click="$store.darkMode.toggle()"
+            class="fixed top-4 right-4 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200">
+        <svg class="w-6 h-6 hidden dark:block text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
-        <svg id="lightModeIcon" class="w-6 h-6 block dark:hidden text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-6 h-6 block dark:hidden text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
         </svg>
     </button>
@@ -38,41 +111,46 @@
                 </div>
                 
                 <!-- Tags Button and Menu Container -->
-                <div class="relative">
-                    <button id="tagsButton" 
+                <div class="relative" x-data="tagsMenu" @keydown.escape="close">
+                    <button @click="isOpen = !isOpen" 
                             class="flex items-center px-3 py-3 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-200">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"></path>
                         </svg>
                     </button>
 
-                    <!-- Tags Menu (Hidden by default) -->
-                    <div id="tagsMenu" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-xl p-4">
+                    <!-- Tags Menu -->
+                    <div x-show="isOpen" 
+                         @click.away="close"
+                         class="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-xl p-4"
+                         x-transition>
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold">Available Tags</h3>
-                            <button id="closeTagsMenu" class="text-gray-500 hover:text-gray-700">
+                            <button @click="close" class="text-gray-500 hover:text-gray-700">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
                             </button>
                         </div>
                         <input type="text" 
-                               id="tagSearchBox" 
+                               x-model="searchTerm"
+                               @input="searchTags"
                                placeholder="Search tags..." 
                                class="w-full px-3 py-2 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700">
                         <div class="space-y-2 max-h-96 overflow-y-auto">
                             {{range .AllTags}}
-                            <div class="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
-                                <span class="w-4 h-4 rounded-full bg-{{.Color}}-500"></span>
-                                <span>{{.Name}}</span>
+                            <div class="tag-item flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
+                                <span class="tag-color w-4 h-4 rounded-full bg-{{.Color}}-500"></span>
+                                <span class="tag-name">{{.Name}}</span>
                             </div>
                             {{end}}
-                            <!-- Add New Tag button (hidden by default) -->
-                            <div id="addTagButton" class="hidden items-center gap-2 p-2 hover:bg-gray-50 rounded-lg cursor-pointer text-blue-600">
+                            <!-- Add New Tag button -->
+                            <div x-show="searchTerm && !hasExactMatch()"
+                                 class="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer text-blue-600">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                 </svg>
-                                <span>Add "<span id="newTagName"></span>"</span>
+                                <span>Add "<span x-text="searchTerm"></span>"</span>
                             </div>
                         </div>
                     </div>
@@ -80,22 +158,30 @@
             </div>
 
             <!-- Sort Controls -->
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4" x-data="sorting">
                 <div class="text-sm text-gray-600">Sort by:</div>
                 <div class="flex gap-2">
                     <!-- Title Sort Button -->
-                    <button id="sortTitle" class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
+                    <button @click="sortByTitle" 
+                            :class="{'bg-blue-50': titleSort}"
+                            class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
                         <span>Title</span>
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
+                        <svg :class="{'text-blue-500': titleSort, 'text-gray-400': !titleSort}"
+                             class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!titleSort || titleSort === 'asc'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
+                            <path x-show="titleSort === 'desc'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4 4m0 0l4-4m-4 4v-12"></path>
                         </svg>
                     </button>
 
                     <!-- Date Sort Button -->
-                    <button id="sortDate" class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
+                    <button @click="sortByDate"
+                            :class="{'bg-blue-50': dateSort}"
+                            class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
                         <span>Date</span>
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
+                        <svg :class="{'text-blue-500': dateSort, 'text-gray-400': !dateSort}"
+                             class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!dateSort || dateSort === 'asc'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
+                            <path x-show="dateSort === 'desc'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4 4m0 0l4-4m-4 4v-12"></path>
                         </svg>
                     </button>
                 </div>
@@ -121,147 +207,5 @@
         </div>
     </div>
 
-    <script>
-        // Tags menu functionality
-        const tagsButton = document.getElementById('tagsButton');
-        const tagsMenu = document.getElementById('tagsMenu');
-        const closeTagsMenu = document.getElementById('closeTagsMenu');
-        const tagSearchBox = document.getElementById('tagSearchBox');
-
-        function closeMenu() {
-            tagsMenu.classList.add('hidden');
-            tagSearchBox.value = '';
-            // Reset visibility of all tag elements
-            const tagElements = document.querySelectorAll('#tagsMenu .space-y-2 > div:not(#addTagButton)');
-            tagElements.forEach(tagEl => {
-                tagEl.style.display = 'flex';
-            });
-            // Hide the add tag button
-            document.getElementById('addTagButton').style.display = 'none';
-        }
-
-        tagsButton.addEventListener('click', () => {
-            const isOpening = tagsMenu.classList.contains('hidden');
-            tagsMenu.classList.toggle('hidden');
-            if (isOpening) {
-                tagSearchBox.focus();
-            } else {
-                closeMenu();
-            }
-        });
-
-        closeTagsMenu.addEventListener('click', closeMenu);
-
-        tagsMenu.addEventListener('click', (e) => {
-            if (e.target === tagsMenu) {
-                closeMenu();
-            }
-        });
-
-        // Add escape key handler
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !tagsMenu.classList.contains('hidden')) {
-                closeMenu();
-            }
-        });
-
-        // Tag search functionality
-        tagSearchBox.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            const tagElements = document.querySelectorAll('#tagsMenu .space-y-2 > div:not(#addTagButton)');
-            const addTagButton = document.getElementById('addTagButton');
-            const newTagName = document.getElementById('newTagName');
-            
-            // Update tag visibility and check for exact match
-            let hasExactMatch = false;
-            tagElements.forEach(tagEl => {
-                const tagName = tagEl.querySelector('span:last-child').textContent.toLowerCase();
-                tagEl.style.display = tagName.includes(searchTerm) ? 'flex' : 'none';
-                if (tagName === searchTerm) {
-                    hasExactMatch = true;
-                }
-            });
-
-            // Show/hide "Add tag" button
-            if (searchTerm && !hasExactMatch) {
-                addTagButton.style.display = 'flex';
-                newTagName.textContent = searchTerm;
-            } else {
-                addTagButton.style.display = 'none';
-            }
-        });
-
-        // Add tag button click handler
-        document.getElementById('addTagButton').addEventListener('click', () => {
-            // TODO: Implement tag addition functionality
-            console.log('Adding tag:', document.getElementById('newTagName').textContent);
-        });
-
-        // Sort functionality
-        const sortTitle = document.getElementById('sortTitle');
-        const sortDate = document.getElementById('sortDate');
-        let titleSortState = null;
-        let dateSortState = 'desc';  // Initialize to 'desc'
-
-        function updateSortIcons(button, state) {
-            const svg = button.querySelector('svg');
-            if (!state) {
-                svg.classList.remove('text-blue-500');
-                svg.classList.add('text-gray-400');
-                button.classList.remove('bg-blue-50');
-            } else {
-                if (state === 'asc') {
-                    svg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>`;
-                } else { // desc
-                    svg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4 4m0 0l4-4m-4 4v-12"></path>`;
-                }
-                svg.classList.remove('text-gray-400');
-                svg.classList.add('text-blue-500');
-                button.classList.add('bg-blue-50');
-            }
-        }
-
-        // Initialize sort icons on page load
-        updateSortIcons(sortTitle, titleSortState);
-        updateSortIcons(sortDate, dateSortState);
-
-        sortTitle.addEventListener('click', () => {
-            titleSortState = titleSortState === 'asc' ? 'desc' : 'asc';
-            dateSortState = null;
-            updateSortIcons(sortTitle, titleSortState);
-            updateSortIcons(sortDate, dateSortState);
-            // TODO: Implement actual sorting
-            console.log('Sort by title:', titleSortState);
-        });
-
-        sortDate.addEventListener('click', () => {
-            dateSortState = dateSortState === 'asc' ? 'desc' : 'asc';
-            titleSortState = null;
-            updateSortIcons(sortDate, dateSortState);
-            updateSortIcons(sortTitle, titleSortState);
-            // TODO: Implement actual sorting
-            console.log('Sort by date:', dateSortState);
-        });
-        // Dark mode functionality
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        
-        // Check for saved dark mode preference
-        if (localStorage.getItem('darkMode') === 'true' || 
-            (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        }
-
-        darkModeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
-        });
-
-        // Listen for system dark mode changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            if (!localStorage.getItem('darkMode')) {
-                document.documentElement.classList.toggle('dark', e.matches);
-            }
-        });
-    </script>
 </body>
 </html> 
