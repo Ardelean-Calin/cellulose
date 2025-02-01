@@ -1,1 +1,3 @@
 *.db
+.aider*
+.env
