@@ -5,9 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cellulose</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen transition-colors duration-200">
     <div class="container mx-auto px-4 py-8 max-w-3xl">
+        <!-- Dark Mode Toggle -->
+        <div class="flex justify-end mb-4">
+            <button id="darkModeToggle" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200">
+                <svg id="darkModeIcon" class="w-6 h-6 hidden dark:block text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <svg id="lightModeIcon" class="w-6 h-6 block dark:hidden text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+        </div>
         <!-- Search, Sort and Tags Button Section -->
         <div class="mb-8 space-y-4">
             <!-- Search and Tags Row -->
@@ -19,20 +35,20 @@
                     <input type="text" 
                            id="searchBox"
                            placeholder="Search..." 
-                           class="w-full pl-10 pr-4 py-3 rounded-2xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                           class="w-full pl-10 pr-4 py-3 rounded-2xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100">
                 </div>
                 
                 <!-- Tags Button and Menu Container -->
                 <div class="relative">
                     <button id="tagsButton" 
-                            class="flex items-center px-3 py-3 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-200">
+                            class="flex items-center px-3 py-3 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-200">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"></path>
                         </svg>
                     </button>
 
                     <!-- Tags Menu (Hidden by default) -->
-                    <div id="tagsMenu" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl p-4">
+                    <div id="tagsMenu" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-xl p-4">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold">Available Tags</h3>
                             <button id="closeTagsMenu" class="text-gray-500 hover:text-gray-700">
@@ -90,7 +106,7 @@
         <!-- Cards List -->
         <div class="space-y-3 md:space-y-4">
             {{range .Documents}}
-            <div class="card bg-white rounded-lg shadow-md p-3 md:p-4 transition-shadow duration-200 hover:shadow-lg cursor-pointer flex flex-col">
+            <div class="card bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-md p-3 md:p-4 transition-shadow duration-200 hover:shadow-lg cursor-pointer flex flex-col">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-1.5 md:mb-2">
                     <h3 class="text-base md:text-lg font-semibold truncate">{{.Title}}</h3>
                     <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">{{.CreatedAt.Format "02 Jan 2006"}}</span>
@@ -226,6 +242,26 @@
             updateSortIcons(sortTitle, titleSortState);
             // TODO: Implement actual sorting
             console.log('Sort by date:', dateSortState);
+        });
+        // Dark mode functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'true' || 
+            (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+        });
+
+        // Listen for system dark mode changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (!localStorage.getItem('darkMode')) {
+                document.documentElement.classList.toggle('dark', e.matches);
+            }
         });
     </script>
 </body>
