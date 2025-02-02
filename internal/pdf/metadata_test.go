@@ -7,6 +7,7 @@ import (
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 )
 
 func TestGetCreationDate(t *testing.T) {
@@ -17,25 +18,20 @@ func TestGetCreationDate(t *testing.T) {
 	// Set an arbitrary creation date
 	creationDate := time.Date(2025, time.February, 2, 15, 4, 5, 0, time.UTC)
 
-	// Create an empty PDF with the specified creation date
-	conf := pdfcpu.NewDefaultConfiguration()
-	conf.TimeNow = func() time.Time { return creationDate }
+	table, err := pdfcpu.CreateDemoXRef()
+	if err != nil {
+		t.Fatalf("Failed to create PDF file table: %v", err)
+	}
 
-	err := api.CreatePDFFile([]string{}, nil, tmpFile, conf)
+	err = api.CreatePDFFile(table, tmpFile, model.NewDefaultConfiguration())
 	if err != nil {
 		t.Fatalf("Failed to create PDF file: %v", err)
 	}
 
 	// Use the function to read back the creation date
-	extractedDateStr, err := GetCreationDate(tmpFile)
+	extractedDate, err := GetCreationDate(tmpFile)
 	if err != nil {
 		t.Fatalf("Failed to get creation date: %v", err)
-	}
-
-	// Parse the extracted date
-	extractedDate, err := time.Parse("2006-01-02T15:04:05Z07:00", extractedDateStr)
-	if err != nil {
-		t.Fatalf("Failed to parse creation date: %v", err)
 	}
 
 	// Compare the dates
