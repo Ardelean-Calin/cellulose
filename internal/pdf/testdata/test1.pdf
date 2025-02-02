@@ -1,0 +1,11 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:iX="http://ns.adobe.com/iX/1.0/">
+<rdf:Description xmlns:pdf="http://ns.adobe.com/pdf/1.3/" rdf:about=""><pdf:Producer>pikepdf 9.2.1</pdf:Producer>
+<pdf:Keywords/>
+</rdf:Description>
+<rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about=""><xmp:ModifyDate>2024-10-03T17:23:32+00:00</xmp:ModifyDate>
+<xmp:CreateDate>2024-10-03T17:23:19Z</xmp:CreateDate>
+<xmp:CreatorTool>ocrmypdf 15.4.4 / Tesseract OCR-PDF 5.3.0</xmp:CreatorTool></rdf:Description>
+<rdf:Description xmlns:xapMM="http://ns.adobe.com/xap/1.0/mm/" rdf:about="" xapMM:DocumentID="uuid:bb94c891-b9c8-11fa-0000-490a73450308"/>
+<rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:about="" dc:format="application/pdf"><dc:title><rdf:Alt><rdf:li xml:lang="x-default">MergedFile</rdf:li></rdf:Alt></dc:title><dc:creator><rdf:Seq><rdf:li/></rdf:Seq></dc:creator></rdf:Description>
+<rdf:Description xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/" rdf:about="" pdfaid:part="2" pdfaid:conformance="B"/><rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="" xmp:MetadataDate="2024-10-03T17:23:32.409463+00:00"/></rdf:RDF>
+</x:xmpmeta>
