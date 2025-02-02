@@ -78,12 +78,72 @@
                     console.log('Sort by date:', this.dateSort);
                 }
             }));
+
+            Alpine.data('dropzone', () => ({
+                isDragging: false,
+                uploadMessage: { text: '', type: 'success' },
+                init() {
+                    window.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape' && this.isDragging) {
+                            this.isDragging = false;
+                        }
+                    });
+                },
+                async handleDrop(event) {
+                    // Only process the drop if we're currently dragging (i.e., drop zone is visible)
+                    if (!this.isDragging) return;
+                    
+                    const file = event.dataTransfer.files[0];
+                    if (!file) return;
+
+                    // Validate PDF file
+                    if (file.type !== 'application/pdf' && !file.name.match(/\.pdf$/i)) {
+                        this.showMessage('Only PDF files are supported', 'error');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('pdf', file);
+
+                    try {
+                        const response = await fetch('/upload', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        if (response.ok) {
+                            this.showMessage(`File uploaded successfully (${this.formatSize(file.size)})`, 'success');
+                        } else {
+                            throw new Error(await response.text());
+                        }
+                    } catch (err) {
+                        this.showMessage(err.message || 'Upload failed', 'error');
+                    }
+                },
+                showMessage(text, type = 'success') {
+                    this.uploadMessage = { text, type };
+                    setTimeout(() => this.uploadMessage = null, 5000);
+                },
+                formatSize(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+                }
+            }));
         });
     </script>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 min-h-screen transition-colors duration-200" 
-      x-data 
-      x-init="$store.darkMode.init()">
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen transition-colors duration-200 p-0" 
+      x-data="dropzone"
+      x-init="$store.darkMode.init()"
+      @dragenter.prevent="isDragging = true"
+      @dragover.prevent="isDragging = true"
+      @dragleave.prevent="if ($event.clientY <= 0 || $event.clientY >= window.innerHeight || $event.clientX <= 0 || $event.clientX >= window.innerWidth) isDragging = false"
+      @drop.prevent="isDragging = false; handleDrop($event)"
+      @dragend.prevent="isDragging = false"
+      @keydown.escape.window="isDragging = false">
     <!-- Dark Mode Toggle -->
     <button @click="$store.darkMode.toggle()"
             class="fixed top-4 right-4 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200">
@@ -96,6 +156,32 @@
     </button>
 
     <div class="container mx-auto px-4 py-8 max-w-3xl">
+        <!-- Drop Zone Area -->
+        <div x-show="isDragging"
+             @drop.prevent="handleDrop($event)"
+             class="mb-4 border-2 border-dashed border-blue-500 rounded-2xl p-8 bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center transition-all duration-200">
+            <div class="text-center">
+                <svg class="w-12 h-12 mx-auto text-blue-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                </svg>
+                <p class="text-lg font-semibold mb-1 text-blue-600 dark:text-blue-400">Drop File here to upload</p>
+                <p class="text-sm text-blue-500 dark:text-blue-300">Supported formats: .pdf, .png, .jpg</p>
+            </div>
+        </div>
+
+        <!-- Upload Success/Error Messages -->
+        <div x-show="uploadMessage && uploadMessage.text" x-transition class="fixed bottom-6 right-6 max-w-md w-full z-[100]">
+            <div :class="uploadMessage.type === 'success' ? 'bg-green-100 dark:bg-green-800' : 'bg-red-100 dark:bg-red-800'" 
+                 class="p-4 rounded-lg shadow-lg flex items-center gap-3">
+                <svg x-show="uploadMessage.type === 'success'" class="w-6 h-6 text-green-500 dark:text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <svg x-show="uploadMessage.type === 'error'" class="w-6 h-6 text-red-500 dark:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                <span x-text="uploadMessage.text" class="flex-grow"></span>
+            </div>
+        </div>
         <!-- Search, Sort and Tags Button Section -->
         <div class="mb-8 space-y-4">
             <!-- Search and Tags Row -->
