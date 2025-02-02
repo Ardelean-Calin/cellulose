@@ -35,6 +35,12 @@ func handleDocuments(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Printf("Retrieved %d documents from database\n", len(documents))
+	for _, doc := range documents {
+		fmt.Printf("Document: ID=%d, Title=%s, Path=%s, Content=%s\n", 
+			doc.ID, doc.Opts.Title, doc.Opts.Path, doc.Opts.Content)
+	}
+
 	tmpl := template.Must(template.ParseFiles("templates/partials/document_cards.html"))
 	tmpl.Execute(w, documents)
 }
