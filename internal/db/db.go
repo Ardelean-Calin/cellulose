@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"internal/pdf"
-
 	_ "modernc.org/sqlite"
+
+	"github.com/Ardelean-Calin/cellulose/internal/pdf"
 )
 
 type DB struct {
@@ -78,10 +78,10 @@ func (db *DB) NewDocument(opts DocumentOptions) (Document, error) {
 
 	// Convert tags slice to comma-separated string
 	tagsStr := "{" + strings.Join(opts.Tags, ",") + "}"
-	
-	fmt.Printf("Executing SQL insert with values: title=%s, path=%s, content=%s, tags=%s\n", 
+
+	fmt.Printf("Executing SQL insert with values: title=%s, path=%s, content=%s, tags=%s\n",
 		opts.Title, opts.Path, opts.Content, tagsStr)
-	
+
 	// Get file info for creation time
 	creationDate, err := pdf.GetCreationDate(opts.Path)
 	if err != nil {
