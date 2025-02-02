@@ -117,6 +117,7 @@
 
                         if (response.ok) {
                             this.showMessage(`File uploaded successfully (${this.formatSize(file.size)})`, 'success');
+                            htmx.trigger(htmx.find("body"), "documentUploaded");
                         } else {
                             throw new Error(await response.text());
                         }
