@@ -96,9 +96,12 @@
                     const file = event.dataTransfer.files[0];
                     if (!file) return;
 
-                    // Validate PDF file
-                    if (file.type !== 'application/pdf' && !file.name.match(/\.pdf$/i)) {
-                        this.showMessage('Only PDF files are supported', 'error');
+                    // Validate file type
+                    const validTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                    const validExtensions = /\.(pdf|jpe?g|png|gif|webp)$/i;
+                    
+                    if (!validTypes.includes(file.type) && !file.name.match(validExtensions)) {
+                        this.showMessage('Only PDF and image files are supported', 'error');
                         return;
                     }
 
@@ -208,7 +211,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                 </svg>
                 <p class="text-lg font-semibold mb-1 text-blue-600 dark:text-blue-400">Drop File here to upload</p>
-                <p class="text-sm text-blue-500 dark:text-blue-300">Supported formats: .pdf, .png, .jpg</p>
+                <p class="text-sm text-blue-500 dark:text-blue-300">Supported formats: PDF, JPEG, PNG, GIF, WebP</p>
             </div>
         </div>
 
