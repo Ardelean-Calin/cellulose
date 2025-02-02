@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -74,7 +77,55 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	fmt.Printf("Received PDF upload: %s (Size: %d bytes)\n", handler.Filename, handler.Size)
+	// Create database connection
+	database, err := db.NewDB(db.Config{
+		DatabasePath: "cellulose.db",
+		DocumentPath: "documents",
+	})
+	if err != nil {
+		http.Error(w, "Database error", http.StatusInternalServerError)
+		return
+	}
+
+	// Initialize database if needed
+	database.Init()
+
+	// Create documents directory if it doesn't exist
+	err = os.MkdirAll("documents", 0755)
+	if err != nil {
+		http.Error(w, "Failed to create documents directory", http.StatusInternalServerError)
+		return
+	}
+
+	// Save file to disk
+	filePath := filepath.Join("documents", handler.Filename)
+	dst, err := os.Create(filePath)
+	if err != nil {
+		http.Error(w, "Failed to create file", http.StatusInternalServerError)
+		return
+	}
+	defer dst.Close()
+
+	if _, err = io.Copy(dst, file); err != nil {
+		http.Error(w, "Failed to save file", http.StatusInternalServerError)
+		return
+	}
+
+	// Add document to database
+	doc, err := database.NewDocument(db.DocumentOptions{
+		Title:   handler.Filename,
+		Path:    filePath,
+		Content: fmt.Sprintf("Uploaded document: %s", handler.Filename),
+		Tags:    []string{}, // No tags initially
+	})
+	if err != nil {
+		// Clean up file if database insert fails
+		os.Remove(filePath)
+		http.Error(w, "Failed to add document to database", http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Printf("Uploaded document: %s (ID: %d)\n", handler.Filename, doc.ID)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Upload successful"))
 }
