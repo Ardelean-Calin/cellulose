@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"crypto/sha256"
+	"encoding/hex"
 	"sort"
 	"strings"
 
@@ -103,7 +105,7 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Save file to disk
+	// Save file to disk and compute hash
 	filePath := filepath.Join("documents", handler.Filename)
 	dst, err := os.Create(filePath)
 	if err != nil {
@@ -112,10 +114,15 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dst.Close()
 
-	if _, err = io.Copy(dst, file); err != nil {
+	hash := sha256.New()
+	writer := io.MultiWriter(dst, hash)
+
+	if _, err = io.Copy(writer, file); err != nil {
 		http.Error(w, "Failed to save file", http.StatusInternalServerError)
 		return
 	}
+
+	hashValue := hex.EncodeToString(hash.Sum(nil))
 
 	// Add document to database
 	fmt.Printf("Attempting to add document to database: %s (path: %s)\n", handler.Filename, filePath)
@@ -123,6 +130,7 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 		Title:   handler.Filename,
 		Path:    filePath,
 		Content: fmt.Sprintf("Uploaded document: %s", handler.Filename),
+		Hash:    hashValue,
 		Tags:    []string{}, // No tags initially
 	})
 	if err != nil {

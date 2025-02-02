@@ -48,6 +48,7 @@ func (db *DB) Init() {
 			title TEXT NOT NULL,
 			path TEXT NOT NULL,
 			content TEXT NOT NULL,
+			hash TEXT NOT NULL,
 			created_at DATETIME NOT NULL,
 			tags INTEGER[] DEFAULT '{}' -- comma separated list of tag ids
 		)
@@ -79,8 +80,8 @@ func (db *DB) NewDocument(opts DocumentOptions) (Document, error) {
 	// Convert tags slice to comma-separated string
 	tagsStr := "{" + strings.Join(opts.Tags, ",") + "}"
 
-	fmt.Printf("Executing SQL insert with values: title=%s, path=%s, content=%s, tags=%s\n",
-		opts.Title, opts.Path, opts.Content, tagsStr)
+	fmt.Printf("Executing SQL insert with values: title=%s, path=%s, content=%s, hash=%s, tags=%s\n",
+		opts.Title, opts.Path, opts.Content, opts.Hash, tagsStr)
 
 	// Get file info for creation time
 	creationDate, err := pdf.GetCreationDate(opts.Path)
@@ -90,8 +91,8 @@ func (db *DB) NewDocument(opts DocumentOptions) (Document, error) {
 	opts.CreatedAt = creationDate
 
 	result, err := db.db.Exec(`
-		INSERT INTO documents (title, path, content, created_at, tags) VALUES (?, ?, ?, ?, ?)
-	`, opts.Title, opts.Path, opts.Content, opts.CreatedAt, tagsStr)
+		INSERT INTO documents (title, path, content, hash, created_at, tags) VALUES (?, ?, ?, ?, ?, ?)
+	`, opts.Title, opts.Path, opts.Content, opts.Hash, opts.CreatedAt, tagsStr)
 	if err != nil {
 		return Document{}, fmt.Errorf("failed to add document: %w", err)
 	}
@@ -143,6 +144,7 @@ type DocumentOptions struct {
 	Title     string
 	Path      string
 	Content   string
+	Hash      string
 	Tags      []string
 	CreatedAt time.Time
 }
@@ -181,7 +183,7 @@ func (db *DB) RemoveTag(id int) error {
 // GetDocuments returns all documents in the database
 func (db *DB) GetDocuments() ([]Document, error) {
 	rows, err := db.db.Query(`
-		SELECT id, title, path, content, created_at FROM documents
+		SELECT id, title, path, content, hash, created_at FROM documents
 	`)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get documents: %w", err)
@@ -191,7 +193,7 @@ func (db *DB) GetDocuments() ([]Document, error) {
 	var documents []Document
 	for rows.Next() {
 		var doc Document
-		err = rows.Scan(&doc.ID, &doc.Opts.Title, &doc.Opts.Path, &doc.Opts.Content, &doc.Opts.CreatedAt)
+		err = rows.Scan(&doc.ID, &doc.Opts.Title, &doc.Opts.Path, &doc.Opts.Content, &doc.Opts.Hash, &doc.Opts.CreatedAt)
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan document: %w", err)
 		}
