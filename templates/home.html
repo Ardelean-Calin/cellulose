@@ -122,7 +122,7 @@
                 },
                 showMessage(text, type = 'success') {
                     this.uploadMessage = { text, type };
-                    setTimeout(() => this.uploadMessage = null, 5000);
+                    setTimeout(() => this.uploadMessage = { text: '', type: 'success' }, 5000);
                 },
                 formatSize(bytes) {
                     if (bytes === 0) return '0 Bytes';
@@ -170,7 +170,7 @@
         </div>
 
         <!-- Upload Success/Error Messages -->
-        <div x-show="uploadMessage && uploadMessage.text" x-transition class="fixed bottom-6 right-6 max-w-md w-full z-[100]">
+        <div x-show="uploadMessage && uploadMessage.text" x-transition class="fixed bottom-6 md:right-6 left-1/2 md:left-auto transform -translate-x-1/2 md:translate-x-0 max-w-md w-[calc(100%-2rem)] z-[100]">
             <div :class="uploadMessage.type === 'success' ? 'bg-green-100 dark:bg-green-800' : 'bg-red-100 dark:bg-red-800'" 
                  class="p-4 rounded-lg shadow-lg flex items-center gap-3">
                 <svg x-show="uploadMessage.type === 'success'" class="w-6 h-6 text-green-500 dark:text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
