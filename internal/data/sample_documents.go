@@ -7,6 +7,7 @@ type Document struct {
 	Description string
 	CreatedAt   time.Time
 	Tags        []Tag
+	Thumbnail   string
 }
 
 type Tag struct {
@@ -24,6 +25,7 @@ func GetSampleDocuments() []Document {
 				{Name: "finance", Color: "amber"},
 				{Name: "report", Color: "blue"},
 			},
+			Thumbnail: "/thumbnails/financial-report-q4.png",
 		},
 		{
 			Title:       "Project Roadmap 2024",
@@ -33,6 +35,7 @@ func GetSampleDocuments() []Document {
 				{Name: "planning", Color: "green"},
 				{Name: "strategy", Color: "purple"},
 			},
+			Thumbnail: "/thumbnails/roadmap-2024.png",
 		},
 		{
 			Title:       "Meeting Minutes - Product Team",
