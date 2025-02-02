@@ -18,6 +18,10 @@ func TestGetCreationDate(t *testing.T) {
 			pdfFile: "testdata/test2.pdf",
 			date:    time.Date(2025, 1, 31, 11, 07, 27, 0, time.UTC),
 		},
+		{
+			pdfFile: "testdata/test3.pdf",
+			date:    time.Date(2025, 1, 31, 11, 07, 27, 0, time.UTC),
+		},
 	}
 
 	for _, e := range expected {
