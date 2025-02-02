@@ -41,10 +41,18 @@ func GetCreationDate(filePath string) (time.Time, error) {
 				}
 			} else if matches[2] != "" {
 				dateStr = matches[2]
-				// Try parsing date in PDF date format
-				t, err := time.Parse("D:20060102150405", dateStr)
-				if err == nil {
-					return t.UTC(), nil
+				// Try parsing date in various PDF date formats
+				layouts := []string{
+					"D:20060102150405",           // Without timezone
+					"D:20060102150405Z07'00'",    // With timezone offset
+					"D:20060102150405-07'00'",    // With negative timezone offset
+					"D:20060102150405Z",          // With 'Z' timezone
+				}
+				for _, layout := range layouts {
+					t, err := time.Parse(layout, dateStr)
+					if err == nil {
+						return t.UTC(), nil
+					}
 				}
 			}
 
