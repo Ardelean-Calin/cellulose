@@ -196,14 +196,15 @@
                 <img src="https://picsum.photos/seed/{{.Title}}/200/200" alt="Document thumbnail" class="w-24 md:w-32 object-cover">
                 <div class="flex flex-col flex-grow p-3 md:p-4">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-1.5 md:mb-2">
-                    <h3 class="text-base md:text-lg font-semibold truncate">{{.Title}}</h3>
-                    <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">{{.CreatedAt.Format "02 Jan 2006"}}</span>
-                </div>
-                <p class="text-gray-600 text-sm mb-2 md:mb-3 line-clamp-2 flex-grow min-h-[2.5rem] md:min-h-[2.75rem]">{{.Description}}</p>
-                <div class="flex flex-wrap gap-1.5 md:gap-2">
-                    {{range .Tags}}
-                    <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-{{.Color}}-500 text-white">{{.Name}}</span>
-                    {{end}}
+                        <h3 class="text-base md:text-lg font-semibold truncate">{{.Title}}</h3>
+                        <span class="text-xs md:text-sm text-gray-400 mt-0.5 md:mt-0">{{.CreatedAt.Format "02 Jan 2006"}}</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-2 md:mb-3 line-clamp-2 flex-grow min-h-[2.5rem] md:min-h-[2.75rem]">{{.Description}}</p>
+                    <div class="flex flex-wrap gap-1.5 md:gap-2">
+                        {{range .Tags}}
+                        <span class="text-xs md:text-sm font-medium px-2 py-0.5 md:py-1 rounded-full bg-{{.Color}}-500 text-white">{{.Name}}</span>
+                        {{end}}
+                    </div>
                 </div>
             </div>
             {{end}}
