@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	"internal/pdf"
+
 	_ "modernc.org/sqlite"
 )
 
@@ -81,11 +83,11 @@ func (db *DB) NewDocument(opts DocumentOptions) (Document, error) {
 		opts.Title, opts.Path, opts.Content, tagsStr)
 	
 	// Get file info for creation time
-	fileInfo, err := os.Stat(opts.Path)
+	creationDate, err := pdf.GetCreationDate(opts.Path)
 	if err != nil {
-		return Document{}, fmt.Errorf("failed to get file info: %w", err)
+		return Document{}, fmt.Errorf("failed to get creation date: %w", err)
 	}
-	opts.CreatedAt = fileInfo.ModTime()
+	opts.CreatedAt = creationDate
 
 	result, err := db.db.Exec(`
 		INSERT INTO documents (title, path, content, created_at, tags) VALUES (?, ?, ?, ?, ?)
