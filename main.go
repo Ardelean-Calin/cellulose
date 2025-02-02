@@ -17,7 +17,7 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleDocuments(w http.ResponseWriter, r *http.Request) {
-	database, err := db.New(db.Config{
+	database, err := db.NewDB(db.Config{
 		DatabasePath: "cellulose.db",
 		DocumentPath: "documents",
 	})
