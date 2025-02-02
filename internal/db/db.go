@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	_ "modernc.org/sqlite"
 )
@@ -45,6 +46,7 @@ func (db *DB) Init() {
 			title TEXT NOT NULL,
 			path TEXT NOT NULL,
 			content TEXT NOT NULL,
+			created_at DATETIME NOT NULL,
 			tags INTEGER[] DEFAULT '{}' -- comma separated list of tag ids
 		)
 	`)
@@ -78,9 +80,16 @@ func (db *DB) NewDocument(opts DocumentOptions) (Document, error) {
 	fmt.Printf("Executing SQL insert with values: title=%s, path=%s, content=%s, tags=%s\n", 
 		opts.Title, opts.Path, opts.Content, tagsStr)
 	
+	// Get file info for creation time
+	fileInfo, err := os.Stat(opts.Path)
+	if err != nil {
+		return Document{}, fmt.Errorf("failed to get file info: %w", err)
+	}
+	opts.CreatedAt = fileInfo.ModTime()
+
 	result, err := db.db.Exec(`
-		INSERT INTO documents (title, path, content, tags) VALUES (?, ?, ?, ?)
-	`, opts.Title, opts.Path, opts.Content, tagsStr)
+		INSERT INTO documents (title, path, content, created_at, tags) VALUES (?, ?, ?, ?, ?)
+	`, opts.Title, opts.Path, opts.Content, opts.CreatedAt, tagsStr)
 	if err != nil {
 		return Document{}, fmt.Errorf("failed to add document: %w", err)
 	}
@@ -129,10 +138,11 @@ type Document struct {
 }
 
 type DocumentOptions struct {
-	Title   string
-	Path    string
-	Content string
-	Tags    []string
+	Title     string
+	Path      string
+	Content   string
+	Tags      []string
+	CreatedAt time.Time
 }
 
 // Tag represents a tag in the database
@@ -169,7 +179,7 @@ func (db *DB) RemoveTag(id int) error {
 // GetDocuments returns all documents in the database
 func (db *DB) GetDocuments() ([]Document, error) {
 	rows, err := db.db.Query(`
-		SELECT id, title, path, content FROM documents
+		SELECT id, title, path, content, created_at FROM documents
 	`)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get documents: %w", err)
@@ -179,7 +189,7 @@ func (db *DB) GetDocuments() ([]Document, error) {
 	var documents []Document
 	for rows.Next() {
 		var doc Document
-		err = rows.Scan(&doc.ID, &doc.Opts.Title, &doc.Opts.Path, &doc.Opts.Content)
+		err = rows.Scan(&doc.ID, &doc.Opts.Title, &doc.Opts.Path, &doc.Opts.Content, &doc.Opts.CreatedAt)
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan document: %w", err)
 		}
