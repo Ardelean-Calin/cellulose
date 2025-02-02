@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	_ "modernc.org/sqlite"
 )
@@ -71,12 +72,15 @@ func (db *DB) NewDocument(opts DocumentOptions) (Document, error) {
 		}
 	}
 
-	fmt.Printf("Executing SQL insert with values: title=%s, path=%s, content=%s, tags=%v\n", 
-		opts.Title, opts.Path, opts.Content, opts.Tags)
+	// Convert tags slice to comma-separated string
+	tagsStr := "{" + strings.Join(opts.Tags, ",") + "}"
+	
+	fmt.Printf("Executing SQL insert with values: title=%s, path=%s, content=%s, tags=%s\n", 
+		opts.Title, opts.Path, opts.Content, tagsStr)
 	
 	result, err := db.db.Exec(`
 		INSERT INTO documents (title, path, content, tags) VALUES (?, ?, ?, ?)
-	`, opts.Title, opts.Path, opts.Content, opts.Tags)
+	`, opts.Title, opts.Path, opts.Content, tagsStr)
 	if err != nil {
 		return Document{}, fmt.Errorf("failed to add document: %w", err)
 	}
