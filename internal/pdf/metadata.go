@@ -22,7 +22,7 @@ func GetCreationDate(filePath string) (time.Time, error) {
 
 	// Updated regex to handle both 'Z' and timezone offset formats
 	// Updated regex to handle both XML and PDF trailer creation dates
-	dateRegex := regexp.MustCompile(`<xmp:CreateDate>([^<]+)</xmp:CreateDate>|/CreationDate\s*\((D:[^\)]+)\)`)
+	dateRegex := regexp.MustCompile(`<xmp:CreateDate>([^<]+)</xmp:CreateDate>|/CreationDate\s*\(([^)]+)\)`)
 
 	// Scan through the file line by line
 	for scanner.Scan() {
@@ -53,6 +53,11 @@ func GetCreationDate(filePath string) (time.Time, error) {
 					if err == nil {
 						return t.UTC(), nil
 					}
+				}
+				// Try parsing date in 'M/D/YYYY HH:MM:SS' format
+				t, err := time.Parse("1/2/2006 15:04:05", dateStr)
+				if err == nil {
+					return t.UTC(), nil
 				}
 			}
 
