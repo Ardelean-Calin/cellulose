@@ -21,29 +21,34 @@ func GetCreationDate(filePath string) (time.Time, error) {
 	scanner := bufio.NewScanner(file)
 
 	// Updated regex to handle both 'Z' and timezone offset formats
-	// Now captures everything between the tags that looks like a timestamp
-	dateRegex := regexp.MustCompile(`<xmp:CreateDate>([^<]+)</xmp:CreateDate>`)
+	// Updated regex to handle both XML and PDF trailer creation dates
+	dateRegex := regexp.MustCompile(`<xmp:CreateDate>([^<]+)</xmp:CreateDate>|/CreationDate\s*\((D:[^\)]+)\)`)
 
 	// Scan through the file line by line
 	for scanner.Scan() {
 		line := scanner.Text()
 		// Check if the line matches our pattern
 		matches := dateRegex.FindStringSubmatch(line)
-		if len(matches) > 1 {
-			// Try parsing with different time formats
-			dateStr := matches[1]
-
-			// First try RFC3339 format (handles both Z and timezone offset)
-			t, err := time.Parse(time.RFC3339, dateStr)
-			if err == nil {
-				return t.UTC(), nil
+		if len(matches) > 0 {
+			// Determine which capture group has the date string
+			var dateStr string
+			if matches[1] != "" {
+				dateStr = matches[1]
+				// Try parsing date in RFC3339 format
+				t, err := time.Parse(time.RFC3339, dateStr)
+				if err == nil {
+					return t.UTC(), nil
+				}
+			} else if matches[2] != "" {
+				dateStr = matches[2]
+				// Try parsing date in PDF date format
+				t, err := time.Parse("D:20060102150405", dateStr)
+				if err == nil {
+					return t.UTC(), nil
+				}
 			}
 
-			// If that fails, try additional formats if needed
-			// Add more formats here if you encounter other variations
-
-			// If all parsing attempts fail
-			return time.Time{}, fmt.Errorf("unable to parse date '%s': %v", dateStr, err)
+			// If parsing fails, continue to next line
 		}
 	}
 
