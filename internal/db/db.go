@@ -71,12 +71,19 @@ func (db *DB) NewDocument(opts DocumentOptions) (Document, error) {
 		}
 	}
 
-	var id int
-	err := db.db.QueryRow(`
+	fmt.Printf("Executing SQL insert with values: title=%s, path=%s, content=%s, tags=%v\n", 
+		opts.Title, opts.Path, opts.Content, opts.Tags)
+	
+	result, err := db.db.Exec(`
 		INSERT INTO documents (title, path, content, tags) VALUES (?, ?, ?, ?)
-	`, opts.Title, opts.Path, opts.Content, opts.Tags).Scan(&id)
+	`, opts.Title, opts.Path, opts.Content, opts.Tags)
 	if err != nil {
 		return Document{}, fmt.Errorf("failed to add document: %w", err)
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return Document{}, fmt.Errorf("failed to get last insert id: %w", err)
 	}
 
 	return Document{ID: id, Opts: opts}, nil

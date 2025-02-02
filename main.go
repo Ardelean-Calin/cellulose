@@ -112,6 +112,7 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Add document to database
+	fmt.Printf("Attempting to add document to database: %s (path: %s)\n", handler.Filename, filePath)
 	doc, err := database.NewDocument(db.DocumentOptions{
 		Title:   handler.Filename,
 		Path:    filePath,
@@ -121,7 +122,8 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		// Clean up file if database insert fails
 		os.Remove(filePath)
-		http.Error(w, "Failed to add document to database", http.StatusInternalServerError)
+		fmt.Printf("Failed to add document to database: %v\n", err)
+		http.Error(w, fmt.Sprintf("Failed to add document to database: %v", err), http.StatusInternalServerError)
 		return
 	}
 
