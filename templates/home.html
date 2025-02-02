@@ -240,7 +240,12 @@
                     </svg>
                     <input type="text" 
                            id="searchBox"
+                           name="search"
                            placeholder="Search..." 
+                           hx-get="/api/documents"
+                           hx-trigger="keyup changed delay:500ms"
+                           hx-target="#document-list"
+                           hx-swap="innerHTML"
                            class="w-full pl-10 pr-4 py-3 rounded-2xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 dark:text-gray-100">
                 </div>
                 
@@ -324,7 +329,7 @@
         </div>
 
         <!-- Cards List -->
-        <div class="space-y-3 md:space-y-4 max-w-3xl mx-auto px-4"
+        <div id="document-list" class="space-y-3 md:space-y-4 max-w-3xl mx-auto px-4"
              hx-get="/api/documents"
              hx-trigger="load, documentUploaded"
              hx-swap="innerHTML">

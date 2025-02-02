@@ -31,7 +31,9 @@ func handleDocuments(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	documents, err := database.GetDocuments()
+	searchQuery := r.URL.Query().Get("search")
+
+	documents, err := database.GetDocumentsByTitle(searchQuery)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

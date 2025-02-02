@@ -235,3 +235,36 @@ func (db *DB) DocumentExistsByHash(hash string) (bool, error) {
 	}
 	return exists, nil
 }
+// GetDocumentsByTitle returns documents filtered by title
+func (db *DB) GetDocumentsByTitle(title string) ([]Document, error) {
+	var (
+		rows *sql.Rows
+		err  error
+	)
+	if title != "" {
+		rows, err = db.db.Query(`
+			SELECT id, title, path, content, hash, created_at FROM documents
+			WHERE title LIKE ?
+		`, "%"+title+"%")
+	} else {
+		rows, err = db.db.Query(`
+			SELECT id, title, path, content, hash, created_at FROM documents
+		`)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("failed to get documents: %w", err)
+	}
+	defer rows.Close()
+
+	var documents []Document
+	for rows.Next() {
+		var doc Document
+		err = rows.Scan(&doc.ID, &doc.Opts.Title, &doc.Opts.Path, &doc.Opts.Content, &doc.Opts.Hash, &doc.Opts.CreatedAt)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan document: %w", err)
+		}
+		documents = append(documents, doc)
+	}
+
+	return documents, nil
+}
