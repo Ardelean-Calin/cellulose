@@ -128,6 +128,7 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Printf("Uploaded document: %s (ID: %d)\n", handler.Filename, doc.ID)
+	w.Header().Set("HX-Trigger", "documentUploaded")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Upload successful"))
 }
