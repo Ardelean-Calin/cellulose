@@ -86,7 +86,7 @@ func (db *DB) NewDocument(opts DocumentOptions) (Document, error) {
 		return Document{}, fmt.Errorf("failed to get last insert id: %w", err)
 	}
 
-	return Document{ID: id, Opts: opts}, nil
+	return Document{ID: int(id), Opts: opts}, nil
 }
 
 // RemoveDocument removes a document from the database
