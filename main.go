@@ -124,6 +124,17 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 
 	hashValue := hex.EncodeToString(hash.Sum(nil))
 
+	// Check if the hash already exists
+	exists, err := database.DocumentExistsByHash(hashValue)
+	if err != nil {
+		http.Error(w, "Database error", http.StatusInternalServerError)
+		return
+	}
+	if exists {
+		http.Error(w, "File already exists", http.StatusBadRequest)
+		return
+	}
+
 	// Add document to database
 	fmt.Printf("Attempting to add document to database: %s (path: %s)\n", handler.Filename, filePath)
 	doc, err := database.NewDocument(db.DocumentOptions{

@@ -225,3 +225,13 @@ func (db *DB) GetTags() ([]Tag, error) {
 
 	return tags, nil
 }
+
+// DocumentExistsByHash checks if a document with the given hash exists in the database
+func (db *DB) DocumentExistsByHash(hash string) (bool, error) {
+	var exists bool
+	err := db.db.QueryRow(`SELECT EXISTS(SELECT 1 FROM documents WHERE hash = ?)`, hash).Scan(&exists)
+	if err != nil {
+		return false, fmt.Errorf("failed to check document existence: %w", err)
+	}
+	return exists, nil
+}
