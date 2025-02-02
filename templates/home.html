@@ -162,7 +162,12 @@
              x-transition>
             <!-- Dark Mode Toggle Item -->
             <div class="w-full px-4 py-2 flex items-center justify-between text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <span>Dark mode</span>
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                    <span>Dark mode</span>
+                </div>
                 <button @click.stop="$store.darkMode.toggle()"
                         class="relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
                         :class="$store.darkMode.isDark ? 'bg-blue-600' : 'bg-gray-200'"
