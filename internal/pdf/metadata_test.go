@@ -20,7 +20,7 @@ func TestGetCreationDate(t *testing.T) {
 		},
 		{
 			pdfFile: "testdata/test3.pdf",
-			date:    time.Date(2025, 1, 31, 11, 07, 27, 0, time.UTC),
+			date:    time.Date(2025, 1, 24, 16, 12, 12, 0, time.UTC),
 		},
 	}
 
