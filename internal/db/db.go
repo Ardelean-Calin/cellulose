@@ -155,6 +155,29 @@ func (db *DB) RemoveTag(id int) error {
 	return nil
 }
 
+// GetDocuments returns all documents in the database
+func (db *DB) GetDocuments() ([]Document, error) {
+	rows, err := db.db.Query(`
+		SELECT id, title, path, content FROM documents
+	`)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get documents: %w", err)
+	}
+	defer rows.Close()
+
+	var documents []Document
+	for rows.Next() {
+		var doc Document
+		err = rows.Scan(&doc.ID, &doc.Opts.Title, &doc.Opts.Path, &doc.Opts.Content)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan document: %w", err)
+		}
+		documents = append(documents, doc)
+	}
+
+	return documents, nil
+}
+
 // GetTags returns all tags in the database
 func (db *DB) GetTags() ([]Tag, error) {
 	rows, err := db.db.Query(`
