@@ -171,33 +171,57 @@
                 </div>
             </div>
 
-            <!-- Sort Controls -->
-            <div class="flex items-center gap-4" x-data="sorting">
-                <div class="text-sm text-gray-600">Sort by:</div>
-                <div class="flex gap-2">
-                    <!-- Title Sort Button -->
-                    <button @click="sortByTitle" 
-                            :class="{'bg-blue-50': titleSort}"
-                            class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
-                        <span>Title</span>
-                        <svg :class="{'text-blue-500': titleSort, 'text-gray-400': !titleSort}"
-                             class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path x-show="!titleSort || titleSort === 'asc'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
-                            <path x-show="titleSort === 'desc'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4 4m0 0l4-4m-4 4v-12"></path>
-                        </svg>
-                    </button>
+            <div class="flex flex-wrap gap-4 items-center">
+                <!-- Sort Controls -->
+                <div class="flex items-center gap-4" x-data="sorting">
+                    <div class="text-sm text-gray-600">Sort by:</div>
+                    <div class="flex gap-2">
+                        <!-- Title Sort Button -->
+                        <button @click="sortByTitle" 
+                                :class="{'bg-blue-50': titleSort}"
+                                class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
+                            <span>Title</span>
+                            <svg :class="{'text-blue-500': titleSort, 'text-gray-400': !titleSort}"
+                                class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path x-show="!titleSort || titleSort === 'asc'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
+                                <path x-show="titleSort === 'desc'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4 4m0 0l4-4m-4 4v-12"></path>
+                            </svg>
+                        </button>
 
-                    <!-- Date Sort Button -->
-                    <button @click="sortByDate"
-                            :class="{'bg-blue-50': dateSort}"
-                            class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
-                        <span>Date</span>
-                        <svg :class="{'text-blue-500': dateSort, 'text-gray-400': !dateSort}"
-                             class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path x-show="!dateSort || dateSort === 'asc'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
-                            <path x-show="dateSort === 'desc'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4 4m0 0l4-4m-4 4v-12"></path>
-                        </svg>
-                    </button>
+                        <!-- Date Sort Button -->
+                        <button @click="sortByDate"
+                                :class="{'bg-blue-50': dateSort}"
+                                class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
+                            <span>Date</span>
+                            <svg :class="{'text-blue-500': dateSort, 'text-gray-400': !dateSort}"
+                                class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path x-show="!dateSort || dateSort === 'asc'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path>
+                                <path x-show="dateSort === 'desc'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4 4m0 0l4-4m-4 4v-12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter Controls -->
+                <div class="flex items-center gap-4" x-data="{ currentFilter: 'all' }">
+                    <div class="text-sm text-gray-600">Filter by:</div>
+                    <div class="flex gap-2">
+                        <button @click="currentFilter = 'all'" 
+                                :class="{'bg-blue-50 dark:bg-blue-800/30': currentFilter === 'all'}"
+                                class="px-3 py-2 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
+                            All
+                        </button>
+                        <button @click="currentFilter = 'pdf'" 
+                                :class="{'bg-blue-50 dark:bg-blue-800/30': currentFilter === 'pdf'}"
+                                class="px-3 py-2 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
+                            PDF
+                        </button>
+                        <button @click="currentFilter = 'images'" 
+                                :class="{'bg-blue-50 dark:bg-blue-800/30': currentFilter === 'images'}"
+                                class="px-3 py-2 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
+                            Images
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
