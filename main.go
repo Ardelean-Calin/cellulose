@@ -3,12 +3,14 @@ package main
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -159,6 +161,87 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+func handleTags(w http.ResponseWriter, r *http.Request) {
+    database, err := db.NewDB(db.Config{
+        DatabasePath: "cellulose.db",
+        DocumentPath: "documents",
+    })
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    tags, err := database.GetTags()
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    tmpl := template.Must(template.ParseFiles("templates/partials/tags_list.html"))
+    tmpl.Execute(w, tags)
+}
+
+func handleCreateTag(w http.ResponseWriter, r *http.Request) {
+    if r.Method != http.MethodPost {
+        http.Error(w, "Invalid request method", http.StatusBadRequest)
+        return
+    }
+
+    var tagData struct {
+        Name  string `json:"name"`
+        Color string `json:"color"`
+    }
+
+    fmt.Printf("Received tag creation request with data: %+v\n", tagData)
+
+    err := json.NewDecoder(r.Body).Decode(&tagData)
+    if err != nil {
+        fmt.Printf("Error decoding request body: %v\n", err)
+        http.Error(w, "Invalid request body", http.StatusBadRequest)
+        return
+    }
+
+    // Validate inputs
+    if tagData.Name == "" || tagData.Color == "" {
+        fmt.Printf("Missing required fields: name=%s, color=%s\n", tagData.Name, tagData.Color)
+        http.Error(w, "Name and color are required", http.StatusBadRequest)
+        return
+    }
+
+    // Validate hex color code
+    if !regexp.MustCompile(`^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$`).MatchString(tagData.Color) {
+        fmt.Printf("Invalid color code: %s\n", tagData.Color)
+        http.Error(w, "Invalid hex color code", http.StatusBadRequest)
+        return
+    }
+
+    database, err := db.NewDB(db.Config{
+        DatabasePath: "cellulose.db",
+        DocumentPath: "documents",
+    })
+    if err != nil {
+        fmt.Printf("Database connection failed: %v\n", err)
+        http.Error(w, "Database connection failed", http.StatusInternalServerError)
+        return
+    }
+
+    tag, err := database.NewTag(tagData.Name, tagData.Color)
+    if err != nil {
+        fmt.Printf("Error creating tag: %v\n", err)
+        if strings.Contains(err.Error(), "already exists") {
+            http.Error(w, "Tag already exists", http.StatusUnprocessableEntity)
+        } else {
+            http.Error(w, "Failed to create tag", http.StatusInternalServerError)
+        }
+        return
+    }
+
+    fmt.Printf("Tag created successfully: %+v\n", tag)
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusCreated)
+    json.NewEncoder(w).Encode(tag)
+}
+
 func main() {
 	// Serve static files
 	fs := http.FileServer(http.Dir("static"))
@@ -167,6 +250,18 @@ func main() {
 	http.HandleFunc("/", handleHome)
 	http.HandleFunc("/upload", handleUpload)
 	http.HandleFunc("/api/documents", handleDocuments)
+	
+	// Updated routing for /api/tags
+	http.HandleFunc("/api/tags", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			handleTags(w, r)
+		} else if r.Method == http.MethodPost {
+			handleCreateTag(w, r)
+		} else {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	})
+	
 	fmt.Println("Server is running on port 8080")
 	http.ListenAndServe(":8080", nil)
 }

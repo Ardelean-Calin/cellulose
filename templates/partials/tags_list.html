@@ -1,0 +1,6 @@
+{{range .}}
+<div class="tag-item flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200">
+    <span class="tag-color w-4 h-4 rounded-full bg-[{{.Color}}]"></span>
+    <span class="tag-name text-gray-700 dark:text-gray-300">{{.Name}}</span>
+</div>
+{{end}}

@@ -158,14 +158,36 @@ type Tag struct {
 
 // NewTag creates a new tag inside the database
 func (db *DB) NewTag(name string, color string) (Tag, error) {
-	var tag Tag
-	err := db.db.QueryRow(`
-		INSERT INTO tags (name, color) VALUES (?, ?)
-	`, name, color).Scan(&tag.ID, &tag.Name, &tag.Color)
-	if err != nil {
-		return Tag{}, fmt.Errorf("failed to add tag: %w", err)
-	}
-	return tag, nil
+    // Check if tag already exists
+    var existingTag Tag
+    err := db.db.QueryRow(`
+        SELECT id, name, color FROM tags WHERE name = ?
+    `, name).Scan(&existingTag.ID, &existingTag.Name, &existingTag.Color)
+    
+    if err == nil {
+        return Tag{}, fmt.Errorf("tag with name %s already exists", name)
+    } else if err != nil && err != sql.ErrNoRows {
+        return Tag{}, fmt.Errorf("failed to check for existing tag: %w", err)
+    }
+
+    // If we get here, the tag doesn't exist - proceed with insertion
+    result, err := db.db.Exec(`
+        INSERT INTO tags (name, color) VALUES (?, ?)
+    `, name, color)
+    if err != nil {
+        return Tag{}, fmt.Errorf("failed to add tag: %w", err)
+    }
+
+    id, err := result.LastInsertId()
+    if err != nil {
+        return Tag{}, fmt.Errorf("failed to get tag ID: %w", err)
+    }
+
+    return Tag{
+        ID:    int(id),
+        Name:  name,
+        Color: color,
+    }, nil
 }
 
 // RemoveTag removes a tag from the database
@@ -216,7 +238,7 @@ func (db *DB) GetTags() ([]Tag, error) {
 	tags := []Tag{}
 	for rows.Next() {
 		var tag Tag
-		err = rows.Scan(&tag.Name, &tag.Color)
+		err = rows.Scan(&tag.ID, &tag.Name, &tag.Color)
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan tag: %w", err)
 		}

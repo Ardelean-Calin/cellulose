@@ -21,30 +21,44 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('tagsMenu', () => ({
         isOpen: false,
         searchTerm: '',
-        tags: [],
-        filteredTags: [],
-        init() {
-            this.tags = Array.from(this.$el.querySelectorAll('.tag-item')).map(el => ({
-                name: el.querySelector('.tag-name').textContent,
-                color: el.querySelector('.tag-color').classList[3].split('-')[1]
-            }));
-            this.filteredTags = this.tags;
-        },
-        searchTags() {
-            const term = this.searchTerm.toLowerCase().trim();
-            this.filteredTags = this.tags.filter(tag => 
-                tag.name.toLowerCase().includes(term)
-            );
-        },
-        hasExactMatch() {
-            return this.searchTerm && this.filteredTags.some(tag => 
-                tag.name.toLowerCase() === this.searchTerm.toLowerCase()
-            );
-        },
         close() {
             this.isOpen = false;
             this.searchTerm = '';
-            this.filteredTags = this.tags;
+            htmx.trigger('#tags-menu', 'search');
+        },
+        searchTags() {
+            htmx.trigger('#tags-menu', 'search');
+        },
+        async handleCreateTag(searchTerm) {
+            if (!searchTerm) return;
+
+            const randomColor = `#${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')}`;
+            
+            try {
+                const response = await fetch('/api/tags', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: searchTerm,
+                        color: randomColor
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(await response.text());
+                }
+
+                // Refresh the tags list
+                htmx.trigger('#tags-menu', 'load');
+                this.close();
+            } catch (error) {
+                console.error('Failed to create tag:', error);
+                // Show error message in the UI
+                this.uploadMessage = { text: `Failed to create tag: ${error.message}`, type: 'error' };
+                setTimeout(() => this.uploadMessage = { text: '', type: 'success' }, 5000);
+            }
         }
     }));
 
