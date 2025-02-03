@@ -1,14 +1,14 @@
 package main
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"html/template"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
-	"crypto/sha256"
-	"encoding/hex"
 	"sort"
 	"strings"
 
@@ -41,7 +41,7 @@ func handleDocuments(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Retrieved %d documents from database\n", len(documents))
 	for _, doc := range documents {
-		fmt.Printf("Document: ID=%d, Title=%s, Path=%s, Content=%s\n", 
+		fmt.Printf("Document: ID=%d, Title=%s, Path=%s, Content=%s\n",
 			doc.ID, doc.Opts.Title, doc.Opts.Path, doc.Opts.Content)
 	}
 
@@ -79,7 +79,7 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 
 	// Parse multipart form with 25MB max size
 	r.ParseMultipartForm(25 << 20)
-	
+
 	file, handler, err := r.FormFile("pdf")
 	if err != nil {
 		http.Error(w, "Error retrieving PDF file", http.StatusBadRequest)
@@ -160,6 +160,10 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// Serve static files
+	fs := http.FileServer(http.Dir("static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
 	http.HandleFunc("/", handleHome)
 	http.HandleFunc("/upload", handleUpload)
 	http.HandleFunc("/api/documents", handleDocuments)
