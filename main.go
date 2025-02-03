@@ -41,14 +41,8 @@ func handleDocuments(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("Retrieved %d documents from database\n", len(documents))
-	for _, doc := range documents {
-		fmt.Printf("Document: ID=%d, Title=%s, Path=%s, Content=%s\n",
-			doc.ID, doc.Opts.Title, doc.Opts.Path, doc.Opts.Content)
-	}
-
-	tmpl := template.Must(template.ParseFiles("templates/partials/document_cards.html"))
-	tmpl.Execute(w, documents)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(documents)
 }
 
 // Helper function to get unique tags from documents
@@ -177,8 +171,8 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    tmpl := template.Must(template.ParseFiles("templates/partials/tags_list.html"))
-    tmpl.Execute(w, tags)
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(tags)
 }
 
 func handleCreateTag(w http.ResponseWriter, r *http.Request) {
@@ -249,10 +243,10 @@ func main() {
 
 	http.HandleFunc("/", handleHome)
 	http.HandleFunc("/upload", handleUpload)
-	http.HandleFunc("/api/documents", handleDocuments)
+	http.HandleFunc("/api/v1/documents", handleDocuments)
 	
 	// Updated routing for /api/tags
-	http.HandleFunc("/api/tags", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/v1/tags", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			handleTags(w, r)
 		} else if r.Method == http.MethodPost {
