@@ -231,10 +231,15 @@ func handleCreateTag(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/upload", handleUpload)
-
-	// POST-ing to /api/documents will upload a new document using handleUpload while GET will return the list of available documents (as JSON). AI!
-	http.HandleFunc("/api/documents", handleDocuments)
+	http.HandleFunc("/api/documents", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			handleDocuments(w, r)
+		} else if r.Method == http.MethodPost {
+			handleUpload(w, r)
+		} else {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	})
 
 	http.HandleFunc("/api/tags", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
