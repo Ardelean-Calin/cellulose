@@ -20,27 +20,32 @@ type DB struct {
 type Config struct {
 	// DatabasePath is the path to the database file
 	DatabasePath string
-	// DocumentPath is the path to the directory where documents are stored
-	DocumentPath string
 }
 
-// NewDB creates a new DB instance
-func NewDB(config Config) (*DB, error) {
-	db, err := sql.Open("sqlite", config.DatabasePath)
+// InitDB creates a new DB instance
+func InitDB() (*DB, error) {
+	db, err := sql.Open("sqlite", "cellulose.db")
 	if err != nil {
 		return nil, fmt.Errorf("failed to open database: %w", err)
 	}
 
 	// Create database directory if it doesn't exist
-	err = os.MkdirAll(filepath.Dir(config.DatabasePath), 0755)
+	err = os.MkdirAll(filepath.Dir("cellulose.db"), 0755)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create database directory: %w", err)
 	}
 
-	return &DB{db: db}, nil
+	d := &DB{db}
+	d.init()
+
+	return d, nil
 }
 
-func (db *DB) Init() {
+func (db *DB) Close() {
+	db.db.Close()
+}
+
+func (db *DB) init() {
 	// Create documents table
 	db.db.Exec(`
 		CREATE TABLE IF NOT EXISTS documents (
@@ -158,36 +163,36 @@ type Tag struct {
 
 // NewTag creates a new tag inside the database
 func (db *DB) NewTag(name string, color string) (Tag, error) {
-    // Check if tag already exists
-    var existingTag Tag
-    err := db.db.QueryRow(`
+	// Check if tag already exists
+	var existingTag Tag
+	err := db.db.QueryRow(`
         SELECT id, name, color FROM tags WHERE name = ?
     `, name).Scan(&existingTag.ID, &existingTag.Name, &existingTag.Color)
-    
-    if err == nil {
-        return Tag{}, fmt.Errorf("tag with name %s already exists", name)
-    } else if err != nil && err != sql.ErrNoRows {
-        return Tag{}, fmt.Errorf("failed to check for existing tag: %w", err)
-    }
 
-    // If we get here, the tag doesn't exist - proceed with insertion
-    result, err := db.db.Exec(`
+	if err == nil {
+		return Tag{}, fmt.Errorf("tag with name %s already exists", name)
+	} else if err != nil && err != sql.ErrNoRows {
+		return Tag{}, fmt.Errorf("failed to check for existing tag: %w", err)
+	}
+
+	// If we get here, the tag doesn't exist - proceed with insertion
+	result, err := db.db.Exec(`
         INSERT INTO tags (name, color) VALUES (?, ?)
     `, name, color)
-    if err != nil {
-        return Tag{}, fmt.Errorf("failed to add tag: %w", err)
-    }
+	if err != nil {
+		return Tag{}, fmt.Errorf("failed to add tag: %w", err)
+	}
 
-    id, err := result.LastInsertId()
-    if err != nil {
-        return Tag{}, fmt.Errorf("failed to get tag ID: %w", err)
-    }
+	id, err := result.LastInsertId()
+	if err != nil {
+		return Tag{}, fmt.Errorf("failed to get tag ID: %w", err)
+	}
 
-    return Tag{
-        ID:    int(id),
-        Name:  name,
-        Color: color,
-    }, nil
+	return Tag{
+		ID:    int(id),
+		Name:  name,
+		Color: color,
+	}, nil
 }
 
 // RemoveTag removes a tag from the database
@@ -257,6 +262,7 @@ func (db *DB) DocumentExistsByHash(hash string) (bool, error) {
 	}
 	return exists, nil
 }
+
 // GetDocumentsByTitle returns documents filtered by title
 func (db *DB) GetDocumentsByTitle(title string) ([]Document, error) {
 	var (
