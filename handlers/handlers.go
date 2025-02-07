@@ -219,6 +219,30 @@ func (app *App) DeleteTagByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) GetDocumentByID(w http.ResponseWriter, r *http.Request) {
+	log.Printf("GET Document with ID: %s\n", r.PathValue("id"))
+
+	// Parse the ID from the URL
+	idStr := r.PathValue("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	// Get the document from the database
+	document, err := app.db.GetDocumentByID(id)
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			http.Error(w, "Document not found", http.StatusNotFound)
+		} else {
+			http.Error(w, "Failed to get document", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	// Return the document as JSON
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(document)
 }
 
 // Delete document by ID

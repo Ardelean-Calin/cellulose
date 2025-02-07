@@ -271,6 +271,23 @@ func (db *DB) GetTags() ([]Tag, error) {
 	return tags, nil
 }
 
+// GetDocumentByID retrieves a document from the database by its ID
+func (db *DB) GetDocumentByID(id int) (Document, error) {
+	var doc Document
+	err := db.db.QueryRow(`
+		SELECT id, title, path, content, hash, created_at 
+		FROM documents 
+		WHERE id = ?
+	`, id).Scan(&doc.ID, &doc.Opts.Title, &doc.Opts.Path, &doc.Opts.Content, &doc.Opts.Hash, &doc.Opts.CreatedAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return Document{}, fmt.Errorf("document with id %d not found", id)
+		}
+		return Document{}, fmt.Errorf("failed to get document: %w", err)
+	}
+	return doc, nil
+}
+
 // DocumentExistsByHash checks if a document with the given hash exists in the database
 func (db *DB) DocumentExistsByHash(hash string) (bool, error) {
 	var exists bool
