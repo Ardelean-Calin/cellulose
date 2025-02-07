@@ -25,7 +25,7 @@ func main() {
 	mux.HandleFunc("GET /api/documents", app.GetDocuments)
 	// mux.HandleFunc("PUT /api/documents/{id}", handler.UpdateByID)
 	mux.HandleFunc("GET /api/documents/{id}", app.GetDocumentByID)
-	// mux.HandleFunc("DELETE /api/documents/{id}", handler.DeleteByID)
+	mux.HandleFunc("DELETE /api/documents/{id}", app.DeleteDocumentByID)
 
 	mux.HandleFunc("POST /api/tags", app.CreateTag)
 	mux.HandleFunc("GET /api/tags", app.GetTags)

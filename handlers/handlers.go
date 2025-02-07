@@ -30,9 +30,9 @@ func (a *App) UploadDocument(w http.ResponseWriter, r *http.Request) {
 	// Parse multipart form with 25MB max size
 	r.ParseMultipartForm(25 << 20)
 
-	file, handler, err := r.FormFile("pdf")
+	file, handler, err := r.FormFile("file")
 	if err != nil {
-		http.Error(w, "Error retrieving PDF file", http.StatusBadRequest)
+		http.Error(w, "Error retrieving PDF file"+err.Error(), http.StatusBadRequest)
 		return
 	}
 	defer file.Close()
@@ -77,9 +77,9 @@ func (a *App) UploadDocument(w http.ResponseWriter, r *http.Request) {
 	// Add document to database
 	log.Printf("Attempting to add document to database: %s (path: %s)\n", handler.Filename, filePath)
 	doc, err := a.db.NewDocument(db.DocumentOptions{
-		Title:   handler.Filename,
+		Title:   r.FormValue("title"),
 		Path:    filePath,
-		Content: fmt.Sprintf("Uploaded document: %s", handler.Filename),
+		Content: r.FormValue("content"),
 		Hash:    hashValue,
 		Tags:    []string{}, // No tags initially
 	})
@@ -218,5 +218,32 @@ func (app *App) DeleteTagByID(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// Get document by ID
-func (app *App) GetDocumentByID(w http.ResponseWriter, r *http.Request) {}
+func (app *App) GetDocumentByID(w http.ResponseWriter, r *http.Request) {
+}
+
+// Delete document by ID
+func (app *App) DeleteDocumentByID(w http.ResponseWriter, r *http.Request) {
+	log.Printf("DELETE Document with ID: %s\n", r.PathValue("id"))
+
+	// Parse the ID from the URL
+	idStr := r.PathValue("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	// Delete the tag from the database
+	err = app.db.RemoveDocument(id)
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			http.Error(w, "Document not found", http.StatusNotFound)
+		} else {
+			http.Error(w, "Failed to delete document", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	// Return success with no content
+	w.WriteHeader(http.StatusNoContent)
+}
