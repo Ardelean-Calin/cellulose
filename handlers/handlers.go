@@ -193,7 +193,29 @@ func (app *App) GetTagByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) DeleteTagByID(w http.ResponseWriter, r *http.Request) {
+	log.Printf("DELETE Tag with ID: %s\n", r.PathValue("id"))
 
+	// Parse the ID from the URL
+	idStr := r.PathValue("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	// Delete the tag from the database
+	err = app.db.RemoveTag(id)
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			http.Error(w, "Tag not found", http.StatusNotFound)
+		} else {
+			http.Error(w, "Failed to delete tag", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	// Return success with no content
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // Get document by ID

@@ -30,6 +30,7 @@ func main() {
 	mux.HandleFunc("POST /api/tags", app.CreateTag)
 	mux.HandleFunc("GET /api/tags", app.GetTags)
 	mux.HandleFunc("GET /api/tags/{id}", app.GetTagByID)
+	mux.HandleFunc("DELETE /api/tags/{id}", app.DeleteTagByID)
 
 	fmt.Println("Server is running on port 8080")
 	if err := http.ListenAndServe(":8080", middleware.Logging(mux)); err != nil {
