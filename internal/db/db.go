@@ -243,13 +243,14 @@ func (db *DB) GetTags() ([]Tag, error) {
 	tags := []Tag{}
 	for rows.Next() {
 		var tag Tag
-		err = rows.Scan(&tag.ID, &tag.Name, &tag.Color)
-		if err != nil {
-			return nil, fmt.Errorf("failed to scan tag: %w", err)
+		if err := rows.Scan(&tag.ID, &tag.Name, &tag.Color); err != nil {
+			return nil, fmt.Errorf("failed to scan tag row: %w", err)
 		}
 		tags = append(tags, tag)
 	}
-
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("failed to iterate through tag rows: %w", err)
+	}
 	return tags, nil
 }
 

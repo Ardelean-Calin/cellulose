@@ -13,6 +13,7 @@ type Document struct {
 }
 
 type Tag struct {
+	ID    int
 	Name  string
 	Color string
 }
