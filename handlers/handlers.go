@@ -168,5 +168,9 @@ func (app *App) GetTagByID(w http.ResponseWriter, r *http.Request) {
 	log.Printf("GET Tag with ID: %s\n", r.PathValue("id"))
 }
 
+func (app *App) DeleteTagByID(w http.ResponseWriter, r *http.Request) {
+
+}
+
 // Get document by ID
 func (app *App) GetDocumentByID(w http.ResponseWriter, r *http.Request) {}
