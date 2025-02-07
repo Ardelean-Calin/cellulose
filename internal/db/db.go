@@ -195,6 +195,23 @@ func (db *DB) NewTag(name string, color string) (Tag, error) {
 	}, nil
 }
 
+// GetTagByID retrieves a tag from the database by its ID.
+func (db *DB) GetTagByID(id int) (Tag, error) {
+	var tag Tag
+	err := db.db.QueryRow(`
+        SELECT id, name, color FROM tags WHERE id = ?
+    `, id).Scan(&tag.ID, &tag.Name, &tag.Color)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return Tag{}, fmt.Errorf("tag with id %d not found", id)
+		}
+		return Tag{}, fmt.Errorf("failed to get tag: %w", err)
+	}
+
+	return tag, nil
+}
+
 // RemoveTag removes a tag from the database
 func (db *DB) RemoveTag(id int) error {
 	_, err := db.db.Exec(`

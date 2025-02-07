@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/Ardelean-Calin/cellulose/internal/db"
@@ -163,9 +164,32 @@ func (app *App) CreateTag(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(tag)
 }
 
-// Get tag by ID
+// GetTagByID retrieves a tag by its ID.
 func (app *App) GetTagByID(w http.ResponseWriter, r *http.Request) {
 	log.Printf("GET Tag with ID: %s\n", r.PathValue("id"))
+
+	// Parse the ID from the URL
+	idStr := r.PathValue("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	// Get the tag from the database
+	tag, err := app.db.GetTagByID(id)
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			http.Error(w, "Tag not found", http.StatusNotFound)
+		} else {
+			http.Error(w, "Failed to get tag", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	// Return the tag as JSON
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(tag)
 }
 
 func (app *App) DeleteTagByID(w http.ResponseWriter, r *http.Request) {
